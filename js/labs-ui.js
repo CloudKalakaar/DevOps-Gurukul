@@ -102,8 +102,10 @@ function showLab(labId) {
     content.appendChild(card);
   });
 
-  // Auto-open first incomplete step
-  if (firstIncomplete >= 0) {
+  // Auto-open logic
+  if (firstIncomplete === 0) {
+    theory.classList.add('open');
+  } else if (firstIncomplete > 0) {
     var fc = document.getElementById('step-card-' + labId + '-' + firstIncomplete);
     if (fc) fc.classList.add('open');
   }
