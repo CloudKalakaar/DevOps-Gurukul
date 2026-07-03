@@ -145,21 +145,22 @@ document.addEventListener('DOMContentLoaded', () => {
     btnRefresh.addEventListener('click', () => {
       btnRefresh.style.transform = 'rotate(360deg)';
       btnRefresh.style.transition = 'transform 0.5s ease';
+      
+      let promises = [];
       if ('caches' in window) {
-        caches.keys().then(names => {
-          for (let name of names) caches.delete(name);
-        });
+        promises.push(caches.keys().then(names => Promise.all(names.map(name => caches.delete(name)))));
       }
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(registrations => {
-          for(let registration of registrations) {
-            registration.unregister();
-          }
-          window.location.reload(true);
-        });
-      } else {
-        window.location.reload(true);
+        promises.push(navigator.serviceWorker.getRegistrations().then(registrations => 
+          Promise.all(registrations.map(r => r.unregister()))
+        ));
       }
+      
+      Promise.all(promises).then(() => {
+        setTimeout(() => { window.location.reload(); }, 200);
+      }).catch(() => {
+        setTimeout(() => { window.location.reload(); }, 200);
+      });
     });
   }
 
