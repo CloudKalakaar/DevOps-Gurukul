@@ -1,4 +1,4 @@
-const CACHE_NAME = 'devops-gurukul-v1';
+const CACHE_NAME = 'devops-gurukul-v2';
 const ASSETS = [
   '/DevOps-Gurukul/',
   '/DevOps-Gurukul/index.html',
@@ -26,6 +26,13 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('/DevOps-Gurukul/')))
+    fetch(e.request)
+      .then(response => {
+        // Dynamically cache the latest files
+        const resClone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(e.request, resClone));
+        return response;
+      })
+      .catch(() => caches.match(e.request).then(cached => cached || caches.match('/DevOps-Gurukul/')))
   );
 });
