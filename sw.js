@@ -1,13 +1,13 @@
 const CACHE_NAME = 'devops-gurukul-v1';
 const ASSETS = [
-  '/DevOps-Training/',
-  '/DevOps-Training/index.html',
-  '/DevOps-Training/css/style.css',
-  '/DevOps-Training/js/app.js',
-  '/DevOps-Training/js/terminal.js',
-  '/DevOps-Training/js/filesystem.js',
-  '/DevOps-Training/icons/icon-192.png',
-  '/DevOps-Training/icons/icon-512.png'
+  '/DevOps-Gurukul/',
+  '/DevOps-Gurukul/index.html',
+  '/DevOps-Gurukul/css/style.css',
+  '/DevOps-Gurukul/js/app.js',
+  '/DevOps-Gurukul/js/terminal.js',
+  '/DevOps-Gurukul/js/filesystem.js',
+  '/DevOps-Gurukul/icons/icon-192.png',
+  '/DevOps-Gurukul/icons/icon-512.png'
 ];
 
 self.addEventListener('install', (e) => {
@@ -26,6 +26,6 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('/DevOps-Training/')))
+    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('/DevOps-Gurukul/')))
   );
 });

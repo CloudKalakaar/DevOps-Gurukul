@@ -2,8 +2,8 @@
   "name": "DevOps Gurukul by CloudKalakaar",
   "short_name": "DevOps Gurukul",
   "description": "Hands-on DevOps & Linux training by CloudKalakaar — interactive terminal labs for real-world skills",
-  "start_url": "/DevOps-Training/",
-  "scope": "/DevOps-Training/",
+  "start_url": "/DevOps-Gurukul/",
+  "scope": "/DevOps-Gurukul/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#0a0e1a",
@@ -64,7 +64,7 @@
       "name": "Linux Terminal",
       "short_name": "Terminal",
       "description": "Open Linux Terminal Lab",
-      "url": "/DevOps-Training/#linux",
+      "url": "/DevOps-Gurukul/#linux",
       "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
     }
   ]

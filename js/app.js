@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if ('serviceWorker' in navigator) {
     const swPath = location.hostname === 'localhost' || location.protocol === 'file:'
       ? './sw.js'
-      : '/DevOps-Training/sw.js';
+      : '/DevOps-Gurukul/sw.js';
     navigator.serviceWorker.register(swPath).catch(() => {});
   }
 
