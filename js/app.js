@@ -140,6 +140,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const statLabs = document.getElementById('stat-labs');
   if (statLabs && typeof LABS !== 'undefined') statLabs.textContent = LABS.length;
 
+  const btnRefresh = document.getElementById('btn-refresh');
+  if (btnRefresh) {
+    btnRefresh.addEventListener('click', () => {
+      btnRefresh.style.transform = 'rotate(360deg)';
+      btnRefresh.style.transition = 'transform 0.5s ease';
+      if ('caches' in window) {
+        caches.keys().then(names => {
+          for (let name of names) caches.delete(name);
+        });
+      }
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          for(let registration of registrations) {
+            registration.unregister();
+          }
+          window.location.reload(true);
+        });
+      } else {
+        window.location.reload(true);
+      }
+    });
+  }
+
   const inp = document.getElementById('terminal-input');
   const termArea = document.getElementById('terminal-area');
 
