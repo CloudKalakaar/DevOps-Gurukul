@@ -1,0 +1,67 @@
+
+/* ── Labs Section ── */
+#section-labs { background: var(--bg-dark); overflow: hidden; }
+.labs-view { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+.labs-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 10px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.labs-header-title { font-size: 17px; font-weight: 700; color: #fff; }
+.labs-header-sub   { font-size: 11px; color: var(--green); font-family: 'JetBrains Mono', monospace; }
+.labs-category-label { padding: 10px 16px 6px; font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; }
+.labs-list { flex: 1; overflow-y: auto; padding: 0 12px 12px; display: flex; flex-direction: column; gap: 10px; }
+.lab-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; cursor: pointer; transition: all 0.2s; }
+.lab-card:hover, .lab-card:active { border-color: var(--green); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+.lab-card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+.lab-num { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; background: linear-gradient(135deg,rgba(0,255,65,0.2),rgba(139,233,253,0.1)); border: 1px solid rgba(0,255,65,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.lab-card-info { flex: 1; min-width: 0; }
+.lab-card-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+.lab-card-meta  { font-size: 11px; color: var(--text-dim); display: flex; gap: 8px; }
+.lab-meta-badge { background: rgba(0,255,65,0.1); color: var(--green); border: 1px solid rgba(0,255,65,0.25); border-radius: 6px; padding: 1px 6px; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; }
+.lab-arrow { color: var(--text-dim); font-size: 16px; flex-shrink: 0; margin-top: 6px; }
+.lab-progress-bar-wrap { height: 4px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+.lab-progress-bar { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--green), var(--cyan)); transition: width 0.4s ease; }
+.lab-progress-label { font-size: 10px; color: var(--text-dim); margin-top: 5px; text-align: right; font-family: 'JetBrains Mono', monospace; }
+.lab-completed .lab-card-title { color: var(--green); }
+.lab-completed .lab-num { background: rgba(0,255,65,0.3); }
+.lab-detail-header { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--bg-card); }
+.lab-back-btn { background: none; border: 1px solid var(--border); color: var(--cyan); font-size: 13px; padding: 5px 10px; border-radius: 6px; cursor: pointer; flex-shrink: 0; transition: all 0.2s; }
+.lab-back-btn:hover { border-color: var(--cyan); }
+.lab-detail-title { flex: 1; font-size: 14px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lab-reset-btn { background: none; border: 1px solid var(--border); color: var(--text-dim); font-size: 16px; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.lab-reset-btn:hover { color: var(--red); border-color: var(--red); }
+.lab-detail-content { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+.lab-objective { background: rgba(0,255,65,0.06); border: 1px solid rgba(0,255,65,0.2); border-radius: 10px; padding: 12px; }
+.lab-objective-label { font-size: 10px; color: var(--green); font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+.lab-objective-text  { font-size: 13px; color: var(--text); line-height: 1.5; }
+.lab-theory { background: rgba(139,233,253,0.04); border: 1px solid rgba(139,233,253,0.15); border-radius: 10px; padding: 12px; cursor: pointer; }
+.lab-theory-toggle { display: flex; align-items: center; justify-content: space-between; }
+.lab-theory-label { font-size: 11px; color: var(--cyan); font-weight: 700; letter-spacing: 1px; }
+.lab-theory-arrow  { font-size: 12px; color: var(--text-dim); transition: transform 0.2s; }
+.lab-theory.open .lab-theory-arrow { transform: rotate(180deg); }
+.lab-theory-body { display: none; margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text); line-height: 1.7; white-space: pre-wrap; }
+.lab-theory.open .lab-theory-body { display: block; }
+.steps-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+.step-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
+.step-card.done { border-color: rgba(0,255,65,0.35); }
+.step-header { display: flex; align-items: center; gap: 10px; padding: 12px; cursor: pointer; }
+.step-check { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.2s; }
+.step-card.done .step-check { background: var(--green); border-color: var(--green); color: #060a14; }
+.step-num   { font-size: 10px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+.step-title { flex: 1; font-size: 13px; font-weight: 600; color: #fff; }
+.step-arrow { font-size: 11px; color: var(--text-dim); transition: transform 0.2s; }
+.step-card.open .step-arrow { transform: rotate(180deg); }
+.step-body { display: none; padding: 0 12px 12px; border-top: 1px solid var(--border); }
+.step-card.open .step-body { display: block; }
+.step-explain { font-size: 12.5px; color: var(--text); line-height: 1.6; padding: 10px 0; }
+.step-cmd-label { font-size: 10px; color: var(--text-dim); letter-spacing: 0.5px; margin-bottom: 5px; }
+.step-cmd { display: flex; align-items: center; gap: 8px; background: var(--bg-term); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+.step-cmd-prompt { color: var(--green); font-family: 'JetBrains Mono', monospace; font-size: 12px; flex-shrink: 0; }
+.step-cmd-text { flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #fff; word-break: break-all; }
+.step-cmd-copy { background: rgba(0,255,65,0.15); border: 1px solid rgba(0,255,65,0.3); color: var(--green); font-size: 11px; padding: 3px 8px; border-radius: 5px; cursor: pointer; flex-shrink: 0; transition: all 0.2s; font-family: 'JetBrains Mono', monospace; }
+.step-cmd-copy:hover { background: rgba(0,255,65,0.3); }
+.step-cmd-copy.copied { color: var(--cyan); border-color: var(--cyan); }
+.step-note { background: rgba(241,250,140,0.06); border-left: 3px solid var(--yellow); border-radius: 0 6px 6px 0; padding: 8px 10px; font-size: 12px; color: var(--text); line-height: 1.5; }
+.step-actions { display: flex; gap: 8px; margin-top: 12px; }
+.step-try-btn { flex: 1; background: rgba(139,233,253,0.12); border: 1px solid rgba(139,233,253,0.3); color: var(--cyan); font-size: 12px; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+.step-try-btn:hover { background: rgba(139,233,253,0.22); }
+.step-done-btn { flex: 1; background: rgba(0,255,65,0.12); border: 1px solid rgba(0,255,65,0.3); color: var(--green); font-size: 12px; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+.step-done-btn:hover { background: rgba(0,255,65,0.25); }
+.step-done-btn.undo { background: rgba(255,85,85,0.1); border-color: rgba(255,85,85,0.3); color: var(--red); }

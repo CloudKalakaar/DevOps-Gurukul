@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#00ff41"/>
+  <meta name="description" content="DevOps Gurukul by CloudKalakaar — hands-on Linux terminal labs, simulated DevOps environment"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="DevOps Gurukul"/>
+  <title>DevOps Gurukul by CloudKalakaar</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link rel="icon" type="image/png" href="icons/icon-192.png"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-logo">
+      <div class="logo-icon">&gt;_</div>
+      <div>
+        <h1>DevOps Gurukul</h1>
+        <div class="header-sub">by CloudKalakaar</div>
+      </div>
+    </div>
+    <div class="header-status">
+      <div class="status-dot"></div>
+      LIVE
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Home Section -->
+    <section class="section active" id="section-home">
+      <div class="home-hero">
+        <div class="hero-badge">🚀 v1.0 · CloudKalakaar</div>
+        <h2 class="hero-title">DevOps Gurukul<br/>by CloudKalakaar</h2>
+        <p class="hero-sub">Hands-on labs, live terminal, real commands. Learn Linux, Docker, CI/CD and more — from your phone.</p>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-val">50+</div>
+          <div class="stat-label">Commands</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="stat-labs">5</div>
+          <div class="stat-label">Labs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">∞</div>
+          <div class="stat-label">Practice</div>
+        </div>
+      </div>
+
+      <div class="modules-grid">
+        <div class="module-card" style="--accent-color:rgba(0,255,65,0.3)" data-section="linux" onclick="document.querySelector('.nav-item[data-section=linux]').click()">
+          <div class="module-badge badge-live">LIVE</div>
+          <div class="module-icon">🐧</div>
+          <div class="module-name">Linux Terminal</div>
+          <div class="module-desc">Real bash environment. Run commands, manage files.</div>
+        </div>
+        <div class="module-card" style="--accent-color:rgba(0,255,65,0.3)" data-section="labs" onclick="document.querySelector('.nav-item[data-section=labs]').click()">
+          <div class="module-badge badge-live">LIVE</div>
+          <div class="module-icon">🧪</div>
+          <div class="module-name">Linux Labs</div>
+          <div class="module-desc">5 beginner labs with step-by-step guidance.</div>
+        </div>
+        <div class="module-card coming-soon" style="--accent-color:rgba(139,233,253,0.3)">
+          <div class="module-badge badge-soon">SOON</div>
+          <div class="module-icon">🐳</div>
+          <div class="module-name">Docker</div>
+          <div class="module-desc">Containers, images, compose & orchestration.</div>
+        </div>
+        <div class="module-card coming-soon" style="--accent-color:rgba(189,147,249,0.3)">
+          <div class="module-badge badge-soon">SOON</div>
+          <div class="module-icon">⚙️</div>
+          <div class="module-name">CI/CD</div>
+          <div class="module-desc">Pipelines, GitHub Actions, Jenkins.</div>
+        </div>
+        <div class="module-card coming-soon" style="--accent-color:rgba(255,121,198,0.3)">
+          <div class="module-badge badge-soon">SOON</div>
+          <div class="module-icon">☁️</div>
+          <div class="module-name">Cloud / AWS</div>
+          <div class="module-desc">EC2, S3, IAM and cloud architecture.</div>
+        </div>
+        <div class="module-card coming-soon" style="--accent-color:rgba(241,250,140,0.3)">
+          <div class="module-badge badge-soon">SOON</div>
+          <div class="module-icon">🏗️</div>
+          <div class="module-name">Terraform</div>
+          <div class="module-desc">Infrastructure as Code. Plan, apply, destroy.</div>
+        </div>
+        <div class="module-card coming-soon" style="--accent-color:rgba(255,85,85,0.3)">
+          <div class="module-badge badge-soon">SOON</div>
+          <div class="module-icon">🎯</div>
+          <div class="module-name">Kubernetes</div>
+          <div class="module-desc">K8s pods, deployments and services.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Linux Terminal Section -->
+    <section class="section" id="section-linux">
+      <div class="term-topbar">
+        <div class="term-dots">
+          <div class="term-dot dot-red"></div>
+          <div class="term-dot dot-yellow"></div>
+          <div class="term-dot dot-green"></div>
+        </div>
+        <div class="term-title">devops@devops-lab: ~</div>
+        <button class="term-clear-btn" onclick="document.getElementById('terminal-output').innerHTML=''">clear</button>
+      </div>
+      <div id="terminal-area">
+        <div id="terminal-output"></div>
+        <div class="term-input-row">
+          <div class="input-prompt">
+            <span id="prompt-user-disp">devops@devops-lab</span><span class="input-prompt-sep">:</span><span id="prompt-path-disp">~</span><span class="input-prompt-sign">$</span>
+          </div>
+          <input id="terminal-input" type="text" inputmode="text" enterkeyhint="send" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="type a command..."/>
+          <button class="input-enter-btn" onclick="submitInput()">↵</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Labs Section -->
+    <section class="section" id="section-labs">
+      <!-- Lab List View -->
+      <div id="labs-list-view" class="labs-view">
+        <div class="labs-header">
+          <div class="labs-header-title">🧪 Labs</div>
+          <div class="labs-header-sub" id="labs-overall-progress">Loading...</div>
+        </div>
+        <div class="labs-category-label">🐧 Beginner — Linux Fundamentals</div>
+        <div id="labs-list" class="labs-list"></div>
+      </div>
+
+      <!-- Lab Detail View -->
+      <div id="labs-detail-view" class="labs-view" style="display:none">
+        <div class="lab-detail-header">
+          <button class="lab-back-btn" onclick="showLabsList()">← Back</button>
+          <div class="lab-detail-title" id="lab-detail-title"></div>
+          <button class="lab-reset-btn" id="lab-reset-btn">↺</button>
+        </div>
+        <div id="lab-detail-content" class="lab-detail-content"></div>
+      </div>
+    </section>
+
+    <!-- Settings Section (placeholder) -->
+    <section class="section" id="section-settings">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;">
+        <div style="font-size:48px">⚙️</div>
+        <div style="font-size:18px;font-weight:700;color:#fff">Settings</div>
+        <div style="font-size:13px;color:var(--text-dim)">Coming soon.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-section="home">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" data-section="linux">
+      <span class="nav-icon">💻</span>
+      <span class="nav-label">Terminal</span>
+    </button>
+    <button class="nav-item" data-section="labs">
+      <span class="nav-icon">🧪</span>
+      <span class="nav-label">Labs</span>
+    </button>
+    <button class="nav-item" data-section="settings">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Settings</span>
+    </button>
+  </nav>
+</div>
+
+<script src="js/filesystem.js"></script>
+<script src="js/packages.js"></script>
+<script src="js/labs.js"></script>
+<script src="js/labs-ui.js"></script>
+<script src="js/terminal.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

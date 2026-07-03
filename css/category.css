@@ -1,0 +1,10 @@
+
+.category-group { margin-bottom: 12px; }
+.category-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+.category-header:active { background: rgba(255,255,255,0.06); }
+.category-title { font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+.category-stats { font-size: 11px; color: var(--text-dim); font-family: "JetBrains Mono", monospace; }
+.category-arrow { font-size: 12px; color: var(--text-dim); transition: transform 0.2s; margin-left: 8px; }
+.category-group.open .category-arrow { transform: rotate(180deg); }
+.category-content { display: none; padding-top: 10px; flex-direction: column; gap: 10px; }
+.category-group.open .category-content { display: flex; }
