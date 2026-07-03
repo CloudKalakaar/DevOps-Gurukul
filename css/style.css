@@ -71,10 +71,10 @@ html, body {
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
 
 /* ── Main ── */
-.main { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.main { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
 
 /* ── Sections ── */
-.section { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+.section { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
 .section.active { display: flex; }
 
 /* ── Home Section ── */
