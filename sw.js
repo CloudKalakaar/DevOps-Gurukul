@@ -1,4 +1,4 @@
-const CACHE_NAME = 'devops-gurukul-v2';
+const CACHE_NAME = 'devops-gurukul-v3';
 const ASSETS = [
   '/DevOps-Gurukul/',
   '/DevOps-Gurukul/index.html',
@@ -6,6 +6,9 @@ const ASSETS = [
   '/DevOps-Gurukul/js/app.js',
   '/DevOps-Gurukul/js/terminal.js',
   '/DevOps-Gurukul/js/filesystem.js',
+  '/DevOps-Gurukul/js/labs.js',
+  '/DevOps-Gurukul/js/labs-ui.js',
+  '/DevOps-Gurukul/js/packages.js',
   '/DevOps-Gurukul/icons/icon-192.png',
   '/DevOps-Gurukul/icons/icon-512.png'
 ];

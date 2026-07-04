@@ -90,7 +90,47 @@ class Terminal {
       'apt-get': () => this.cmdApt(args),
       reset: () => { this.fs.reset(); if(this.pkg){ this.pkg.installed.clear(); this.pkg.save(); } return '\x1b[33mEnvironment reset to defaults. Refresh the page.\x1b[0m'; },
       which: () => this.cmdWhich(args),
-      alias: () => 'alias ll=\'ls -la\'\nalias la=\'ls -A\'\nalias l=\'ls -CF\'',
+      
+      id: () => 'uid=1000(devops) gid=1000(devops) groups=1000(devops)',
+      groupadd: () => '',
+      useradd: () => '',
+      sleep: () => '[1] 12345',
+      pkill: () => '',
+      crontab: () => args.length ? '' : '* * * * * echo hello',
+      systemctl: () => args[0] === 'status' ? (args.includes('nginx') ? 'active (running)' : 'inactive') : '',
+      tar: () => args.includes('-tf') ? 'file1.txt\nfile2.txt' : 'file1.txt\nfile2.txt',
+      ss: () => 'State      Recv-Q Send-Q Local Address:Port Peer Address:Port\nLISTEN     0      128    127.0.0.1:80      0.0.0.0:*',
+
+      id: () => 'uid=1000(devops) gid=1000(devops) groups=1000(devops)',
+      groupadd: () => '',
+      useradd: () => '',
+      sleep: () => '[1] 12345',
+      pkill: () => '',
+      crontab: () => args.length ? '' : '* * * * * echo hello',
+      systemctl: () => {
+        if (args.includes('daemon-reload')) return '';
+        if (args[0] === 'status') return args.includes('nginx') ? 'active (running)' : 'inactive';
+        return '';
+      },
+      tar: () => args.includes('-tf') ? 'file1.txt\nfile2.txt' : 'file1.txt\nfile2.txt',
+      ss: () => args.includes('-tln') ? 'State      Recv-Q Send-Q Local Address:Port Peer Address:Port\nLISTEN     0      128    127.0.0.1:80      0.0.0.0:*' : 'State      Recv-Q Send-Q Local Address:Port Peer Address:Port\nESTAB      0      0      10.0.0.2:22       192.168.1.5:54321',
+      'systemd-analyze': () => {
+        if (args.includes('blame')) return '1.2s myservice.service\n800ms network.service\n300ms sshd.service';
+        return 'Startup finished in 2.3s (kernel) + 1.1s (userspace) = 3.4s';
+      },
+      lsblk: () => 'NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT\nsda      8:0    0   20G  0 disk \n├─sda1   8:1    0   19G  0 part /\n└─sda2   8:2    0    1G  0 part [SWAP]',
+      fdisk: () => 'Disk /dev/sda: 20 GiB, 21474836480 bytes, 41943040 sectors\nUnits: sectors of 1 * 512 = 512 bytes',
+      'mkfs.ext4': () => 'mke2fs 1.45.5 (07-Jan-2020)\nCreating journal (16384 blocks): done',
+      mount: () => '',
+      vgcreate: () => 'Volume group "datavg" successfully created',
+      lvcreate: () => 'Logical volume "app_lv" created',
+      swapon: () => 'NAME       TYPE      SIZE USED PRIO\n/dev/sda2  partition   1G   0B   -2',
+      iptables: () => args.includes('-L') ? 'Chain INPUT (policy ACCEPT)\ntarget     prot opt source               destination' : '',
+      'ssh-keygen': () => 'Generating public/private ed25519 key pair.\nYour identification has been saved in /home/devops/.ssh/id_ed25519\nYour public key has been saved in /home/devops/.ssh/id_ed25519.pub',
+      vmstat: () => 'procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----\n r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st\n 1  0      0  1234M   100M   500M    0    0    10    20  100  200  5  2 93  0  0',
+      iostat: () => 'Linux 5.4.0-100-generic (devops-lab) \n\navg-cpu:  %user   %nice %system %iowait  %steal   %idle\n           5.00    0.00    2.00    0.00    0.00   93.00',
+      du: () => '500M /var/log/syslog\n100M /var/log/auth.log\n50M  /var/log/dmesg',
+alias: () => 'alias ll=\'ls -la\'\nalias la=\'ls -A\'\nalias l=\'ls -CF\'',
       exit: () => '__EXIT__',
       logout: () => '__EXIT__',
     };

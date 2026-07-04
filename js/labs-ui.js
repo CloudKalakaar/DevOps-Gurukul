@@ -23,7 +23,6 @@ function renderLabsList() {
     
     var group = document.createElement('div');
     group.className = 'category-group';
-    if (list.children.length === 0) group.classList.add('open');
     
     group.innerHTML = '<div class="category-header"><div style="display:flex;align-items:center;gap:10px;"><div class="category-title">' + cat + '</div></div><div style="display:flex;align-items:center;"><div class="category-stats">' + labsDone + '/' + catLabs.length + ' labs</div><div class="category-arrow">▼</div></div></div><div class="category-content"></div>';
     

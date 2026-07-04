@@ -656,6 +656,567 @@ Shortcuts:
       }
     ]
   }
+  ,
+  {
+    id: 'i01', num: 11, category: 'Linux Intermediate', title: 'Users and Groups',
+    icon: '👥', duration: '15 min',
+    objective: 'Manage users and groups using useradd, usermod, and groupadd.',
+    theory: `Linux is a multi-user system. Every process runs as a specific user.
+Users are organized into groups for easier permission management.
+
+Core commands:
+  useradd <name>   Create a new user
+  usermod          Modify user properties
+  groupadd <name>  Create a new group
+  id               Show current user identity`,
+    steps: [
+      {
+        title: 'Check current user',
+        explain: 'First, see who you are logged in as.',
+        cmd: 'id',
+        expect: 'uid=',
+        note: 'You are logged in as devops.'
+      },
+      {
+        title: 'Create a new group',
+        explain: 'Create a group named developers.',
+        cmd: 'groupadd developers',
+        expect: '',
+        note: 'Groups help manage permissions for multiple users at once.'
+      },
+      {
+        title: 'Create a new user',
+        explain: 'Create a user named alice and add her to developers.',
+        cmd: 'useradd -G developers alice',
+        expect: '',
+        note: 'The -G flag adds the user to a supplementary group.'
+      }
+    ]
+  },
+  {
+    id: 'i02', num: 12, category: 'Linux Intermediate', title: 'Sudo and Privilege Escalation',
+    icon: '🛡️', duration: '10 min',
+    objective: 'Understand sudo and privilege escalation.',
+    theory: `The root user is the ultimate admin in Linux. 
+However, logging in directly as root is dangerous.
+
+Instead, we use "sudo" (SuperUser DO) to temporarily elevate privileges for a single command.`,
+    steps: [
+      {
+        title: 'Attempt an admin command',
+        explain: 'Try to read the secure shadow file without sudo.',
+        cmd: 'cat /etc/shadow',
+        expect: 'Permission denied',
+        note: 'You get Permission denied because it requires root.'
+      },
+      {
+        title: 'Use sudo',
+        explain: 'Use sudo to run the same command as root.',
+        cmd: 'sudo cat /etc/shadow',
+        expect: 'root:',
+        note: 'Sudo elevated your privileges to read the file.'
+      }
+    ]
+  },
+  {
+    id: 'i03', num: 13, category: 'Linux Intermediate', title: 'Monitor Processes',
+    icon: '📈', duration: '15 min',
+    objective: 'Monitor processes using ps, top, and htop.',
+    theory: `Every running program is a "process".
+You need to know what processes are running and how much CPU/RAM they use.
+
+Commands:
+  ps    Snapshot of current processes
+  top   Live updating list of processes
+  htop  Interactive, colorful process viewer`,
+    steps: [
+      {
+        title: 'View all processes',
+        explain: 'Use ps to list every process on the system.',
+        cmd: 'ps aux',
+        expect: 'PID',
+        note: 'aux shows processes for all users in a detailed format.'
+      },
+      {
+        title: 'Search for a process',
+        explain: 'Find if a specific service is running by combining ps and grep.',
+        cmd: 'ps aux | grep bash',
+        expect: 'bash',
+        note: 'This is the most common way to check if an app is running.'
+      },
+      {
+        title: 'Run top',
+        explain: 'View live process statistics.',
+        cmd: 'top -n 1',
+        expect: 'Tasks:',
+        note: '-n 1 runs top for a single iteration and exits.'
+      }
+    ]
+  },
+  {
+    id: 'i04', num: 14, category: 'Linux Intermediate', title: 'Kill Processes',
+    icon: '💀', duration: '10 min',
+    objective: 'Kill and manage processes using kill and pkill.',
+    theory: `When a process hangs or consumes too many resources, you must terminate it.
+
+Signals:
+  SIGTERM (15)  Polite request to stop (default)
+  SIGKILL (9)   Forceful immediate termination
+
+Commands:
+  kill <PID>    Kill by Process ID
+  pkill <name>  Kill by process name`,
+    steps: [
+      {
+        title: 'Create a background process',
+        explain: 'Start a process that runs infinitely in the background.',
+        cmd: 'sleep 300 &',
+        expect: '[1]',
+        note: 'The & symbol puts the command in the background.'
+      },
+      {
+        title: 'Kill by name',
+        explain: 'Use pkill to terminate the sleep process.',
+        cmd: 'pkill sleep',
+        expect: '',
+        note: 'pkill is faster than finding the PID manually.'
+      }
+    ]
+  },
+  {
+    id: 'i05', num: 15, category: 'Linux Intermediate', title: 'Schedule Jobs',
+    icon: '⏰', duration: '12 min',
+    objective: 'Schedule jobs using cron and at.',
+    theory: `Automation requires running scripts at specific times.
+"cron" runs tasks on a repeating schedule.
+
+Cron format: * * * * * command
+(Minute Hour Day Month DayOfWeek)`,
+    steps: [
+      {
+        title: 'View crontab',
+        explain: 'List the current scheduled cron jobs for your user.',
+        cmd: 'crontab -l',
+        expect: '',
+        note: 'By default, it is empty.'
+      },
+      {
+        title: 'Add a cron job',
+        explain: 'Echo a new cron job that runs every minute.',
+        cmd: 'echo "* * * * * echo hello >> /tmp/cron.log" > mycron && crontab mycron',
+        expect: '',
+        note: 'This writes the job to a file and loads it into crontab.'
+      },
+      {
+        title: 'Verify the job',
+        explain: 'Check if it was loaded successfully.',
+        cmd: 'crontab -l',
+        expect: '* * * * * echo hello',
+        note: 'The task is now scheduled.'
+      }
+    ]
+  },
+  {
+    id: 'i06', num: 16, category: 'Linux Intermediate', title: 'Manage Services',
+    icon: '⚙️', duration: '15 min',
+    objective: 'Manage services using systemctl.',
+    theory: `Modern Linux uses "systemd" to manage background services (daemons).
+You control it using the systemctl command.
+
+Commands:
+  systemctl start <service>
+  systemctl stop <service>
+  systemctl restart <service>
+  systemctl status <service>`,
+    steps: [
+      {
+        title: 'Check service status',
+        explain: 'Check the status of the simulated nginx web server.',
+        cmd: 'systemctl status nginx',
+        expect: 'inactive',
+        note: 'It is currently stopped.'
+      },
+      {
+        title: 'Start the service',
+        explain: 'Use systemctl to start it.',
+        cmd: 'systemctl start nginx',
+        expect: '',
+        note: 'It runs silently on success.'
+      },
+      {
+        title: 'Verify it is running',
+        explain: 'Check the status again.',
+        cmd: 'systemctl status nginx',
+        expect: 'active',
+        note: 'The service is now active.'
+      }
+    ]
+  },
+  {
+    id: 'i07', num: 17, category: 'Linux Intermediate', title: 'Analyze Logs',
+    icon: '📜', duration: '12 min',
+    objective: 'Analyze logs in /var/log.',
+    theory: `Logs are critical for debugging. 
+Most system logs live in /var/log.
+
+Important logs:
+  /var/log/syslog    General system activity
+  /var/log/auth.log  Authentication attempts
+  
+Use commands like tail and grep to read them.`,
+    steps: [
+      {
+        title: 'Simulate a log file',
+        explain: 'First, let us create a fake syslog with some errors.',
+        cmd: 'echo -e "Started nginx\\nERROR: Failed to bind port\\nStopped nginx" > /var/log/syslog',
+        expect: '',
+        note: ''
+      },
+      {
+        title: 'View recent logs',
+        explain: 'Use tail to view the last 10 lines of the log.',
+        cmd: 'tail /var/log/syslog',
+        expect: 'nginx',
+        note: 'tail is great for watching live logs.'
+      },
+      {
+        title: 'Filter for errors',
+        explain: 'Use grep to find only the ERROR lines.',
+        cmd: 'grep ERROR /var/log/syslog',
+        expect: 'ERROR',
+        note: 'This isolates the problem quickly.'
+      }
+    ]
+  },
+  {
+    id: 'i08', num: 18, category: 'Linux Intermediate', title: 'Archives and Compression',
+    icon: '🗜️', duration: '15 min',
+    objective: 'Work with tar, gzip, zip files.',
+    theory: `To save space or bundle files for transfer, we use archives.
+
+Tar (Tape Archive) bundles files together. Gzip compresses them.
+
+Flags for tar:
+  -c  Create archive
+  -x  Extract archive
+  -v  Verbose (show files)
+  -f  Specify filename
+  -z  Compress with gzip (.tar.gz)`,
+    steps: [
+      {
+        title: 'Create dummy files',
+        explain: 'Make some files to compress.',
+        cmd: 'touch file1.txt file2.txt',
+        expect: '',
+        note: ''
+      },
+      {
+        title: 'Create a tarball',
+        explain: 'Bundle and compress them into a .tar.gz archive.',
+        cmd: 'tar -czvf myarchive.tar.gz file1.txt file2.txt',
+        expect: 'file',
+        note: 'The output shows the files being packed.'
+      },
+      {
+        title: 'List archive contents',
+        explain: 'See what is inside without extracting it.',
+        cmd: 'tar -tf myarchive.tar.gz',
+        expect: 'file1.txt',
+        note: 'The -t flag lists the contents.'
+      }
+    ]
+  },
+  {
+    id: 'i09', num: 19, category: 'Linux Intermediate', title: 'Network Troubleshooting',
+    icon: '🌐', duration: '15 min',
+    objective: 'Network troubleshooting using ping, netstat, ss.',
+    theory: `When an app goes down, it is often a network issue.
+
+Commands:
+  ping     Test connectivity to a host
+  ss       Modern alternative to view active connections`,
+    steps: [
+      {
+        title: 'Test connectivity',
+        explain: 'Ping google.com to check if you have internet access.',
+        cmd: 'ping -c 3 google.com',
+        expect: 'bytes from',
+        note: '-c 3 sends exactly 3 packets.'
+      },
+      {
+        title: 'View connections',
+        explain: 'Use ss to list all active TCP connections.',
+        cmd: 'ss -t',
+        expect: 'State',
+        note: '-t shows only TCP sockets.'
+      }
+    ]
+  },
+  {
+    id: 'i10', num: 20, category: 'Linux Intermediate', title: 'Open Ports',
+    icon: '🚪', duration: '10 min',
+    objective: 'Check open ports and services.',
+    theory: `Servers listen for traffic on specific "ports".
+Port 80 is HTTP, 443 is HTTPS, 22 is SSH.
+
+You must ensure your application is actually listening on the expected port.`,
+    steps: [
+      {
+        title: 'View listening ports',
+        explain: 'Use ss to see what ports are open and listening.',
+        cmd: 'ss -tln',
+        expect: 'LISTEN',
+        note: '-l means listening, -n shows numeric ports instead of names.'
+      },
+      {
+        title: 'Test a local port',
+        explain: 'Check if something is responding on port 80.',
+        cmd: 'curl -I http://localhost:80',
+        expect: 'HTTP',
+        note: 'curl -I fetches just the HTTP headers.'
+      }
+    ]
+  }
+  ,
+  {
+    id: 'a01', num: 21, category: 'Advanced OS / Admin', title: 'Custom Systemd Services',
+    icon: '⚙️', duration: '15 min',
+    objective: 'Configure and manage custom systemd services.',
+    theory: `systemd manages services via unit files in /etc/systemd/system/.
+You can create a custom .service file to run any script or program as a daemon in the background.`,
+    steps: [
+      {
+        title: 'Create service file',
+        explain: 'Create a simple service unit file.',
+        cmd: 'echo "[Service]\\nExecStart=/bin/echo hello" > /etc/systemd/system/myservice.service',
+        expect: '',
+        note: 'This defines what the service runs.'
+      },
+      {
+        title: 'Reload systemd daemon',
+        explain: 'Systemd must be told to look for new files.',
+        cmd: 'systemctl daemon-reload',
+        expect: '',
+        note: 'Always run this after editing a .service file.'
+      }
+    ]
+  },
+  {
+    id: 'a02', num: 22, category: 'Advanced OS / Admin', title: 'Analyze Boot Process',
+    icon: '⏱️', duration: '10 min',
+    objective: 'Analyze boot process using systemd-analyze.',
+    theory: `Slow boot times can be debugged using systemd-analyze.
+It shows how long the kernel, initramfs, and userspace took to boot.
+Use "blame" to find exactly which service slowed down the boot.`,
+    steps: [
+      {
+        title: 'Check total boot time',
+        explain: 'See how long the system took to start.',
+        cmd: 'systemd-analyze',
+        expect: 'Startup finished',
+        note: 'Shows a summary of boot times.'
+      },
+      {
+        title: 'Find slow services',
+        explain: 'List the slowest services to start.',
+        cmd: 'systemd-analyze blame | head -n 3',
+        expect: 'ms',
+        note: 'Useful for finding misconfigured daemons.'
+      }
+    ]
+  },
+  {
+    id: 'a03', num: 23, category: 'Advanced OS / Admin', title: 'Manage Disk Partitions',
+    icon: '💽', duration: '15 min',
+    objective: 'Manage disk partitions using fdisk or parted.',
+    theory: `Disks must be partitioned before use.
+Linux sees disks as block devices (e.g., /dev/sda, /dev/nvme0n1).
+"fdisk" is an interactive tool for MBR/GPT partitioning.`,
+    steps: [
+      {
+        title: 'List block devices',
+        explain: 'View all attached disks and partitions.',
+        cmd: 'lsblk',
+        expect: 'disk',
+        note: 'Shows the tree of disks and partitions.'
+      },
+      {
+        title: 'Check partition tables',
+        explain: 'Use fdisk to list partition details.',
+        cmd: 'fdisk -l',
+        expect: 'Disk /dev',
+        note: 'Requires root privileges (simulated here).'
+      }
+    ]
+  },
+  {
+    id: 'a04', num: 24, category: 'Advanced OS / Admin', title: 'Filesystems and Mounts',
+    icon: '📁', duration: '15 min',
+    objective: 'Create and mount filesystems (ext4, xfs).',
+    theory: `A partition needs a filesystem (like ext4 or xfs) before storing files.
+Mounting attaches that filesystem to a directory in your tree.
+The /etc/fstab file makes mounts permanent across reboots.`,
+    steps: [
+      {
+        title: 'Format a partition',
+        explain: 'Create an ext4 filesystem on a block device.',
+        cmd: 'mkfs.ext4 /dev/sdb1',
+        expect: 'Creating journal',
+        note: 'This destroys all data on /dev/sdb1.'
+      },
+      {
+        title: 'Mount the filesystem',
+        explain: 'Attach it to the /data directory.',
+        cmd: 'mount /dev/sdb1 /data',
+        expect: '',
+        note: 'Files written to /data now go to the sdb1 partition.'
+      }
+    ]
+  },
+  {
+    id: 'a05', num: 25, category: 'Advanced OS / Admin', title: 'Logical Volume Manager (LVM)',
+    icon: '📚', duration: '20 min',
+    objective: 'Configure LVM (create VG, LV, extend volumes).',
+    theory: `LVM abstracts physical disks into flexible logical volumes.
+1. Physical Volumes (PV): The actual disks.
+2. Volume Groups (VG): Pools of PVs.
+3. Logical Volumes (LV): Virtual partitions carved from a VG.`,
+    steps: [
+      {
+        title: 'Create a Volume Group',
+        explain: 'Combine disks into a VG named datavg.',
+        cmd: 'vgcreate datavg /dev/sdc',
+        expect: 'successfully created',
+        note: 'You can add more disks to this pool later.'
+      },
+      {
+        title: 'Create a Logical Volume',
+        explain: 'Carve out a 10G logical volume named app_lv.',
+        cmd: 'lvcreate -L 10G -n app_lv datavg',
+        expect: 'created',
+        note: 'This creates the device /dev/datavg/app_lv.'
+      }
+    ]
+  },
+  {
+    id: 'a06', num: 26, category: 'Advanced OS / Admin', title: 'Swap and Memory',
+    icon: '🧠', duration: '15 min',
+    objective: 'Manage swap space and tune memory usage.',
+    theory: `Swap is disk space used when RAM is full.
+It prevents the system from crashing (OOM - Out of Memory) but is very slow.`,
+    steps: [
+      {
+        title: 'Check memory and swap',
+        explain: 'View how much RAM and swap is in use.',
+        cmd: 'free -h',
+        expect: 'Swap:',
+        note: '-h makes the sizes human-readable (Megabytes/Gigabytes).'
+      },
+      {
+        title: 'View swap devices',
+        explain: 'See which disks or files provide the swap.',
+        cmd: 'swapon --show',
+        expect: 'NAME',
+        note: 'You can add a swap file using mkswap and swapon.'
+      }
+    ]
+  },
+  {
+    id: 'a07', num: 27, category: 'Advanced OS / Admin', title: 'Firewall Configuration',
+    icon: '🔥', duration: '15 min',
+    objective: 'Configure firewall using iptables or firewalld.',
+    theory: `Linux firewalls block or allow network traffic.
+"iptables" is the traditional tool, while "firewalld" provides a higher-level zone-based approach.`,
+    steps: [
+      {
+        title: 'List firewall rules',
+        explain: 'Show current iptables rules.',
+        cmd: 'iptables -L -n',
+        expect: 'Chain INPUT',
+        note: '-n prevents slow DNS resolution of IP addresses.'
+      },
+      {
+        title: 'Allow a port',
+        explain: 'Open TCP port 80 for web traffic.',
+        cmd: 'iptables -A INPUT -p tcp --dport 80 -j ACCEPT',
+        expect: '',
+        note: '-A appends the rule. -j ACCEPT allows the packet.'
+      }
+    ]
+  },
+  {
+    id: 'a08', num: 28, category: 'Advanced OS / Admin', title: 'SSH Keys and Auth',
+    icon: '🔑', duration: '15 min',
+    objective: 'Set up and troubleshoot SSH access.',
+    theory: `SSH keys are mathematically linked pairs (Public/Private) used for secure logins without passwords.
+The public key goes on the server in ~/.ssh/authorized_keys.
+The private key stays strictly on your client.`,
+    steps: [
+      {
+        title: 'Generate a keypair',
+        explain: 'Create an ed25519 SSH key.',
+        cmd: 'ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""',
+        expect: 'Your public key has been saved',
+        note: '-N "" means no passphrase is required to use the key.'
+      },
+      {
+        title: 'View the public key',
+        explain: 'This is what you paste into GitHub or the remote server.',
+        cmd: 'cat ~/.ssh/id_ed25519.pub',
+        expect: 'ssh-ed25519',
+        note: 'Never share the private key (without the .pub extension)!'
+      }
+    ]
+  },
+  {
+    id: 'a09', num: 29, category: 'Advanced OS / Admin', title: 'System Performance',
+    icon: '📊', duration: '15 min',
+    objective: 'Monitor system performance using vmstat, iostat, sar.',
+    theory: `Performance tuning requires gathering metrics.
+  vmstat: Virtual memory and CPU usage
+  iostat: Disk I/O performance
+  sar: Historical system activity (sysstat package)`,
+    steps: [
+      {
+        title: 'Check memory/cpu stats',
+        explain: 'Run vmstat to get a quick overview.',
+        cmd: 'vmstat 1 3',
+        expect: 'procs',
+        note: 'This runs 3 times with a 1-second delay.'
+      },
+      {
+        title: 'Check disk I/O',
+        explain: 'View how hard the disks are working.',
+        cmd: 'iostat -x 1 2',
+        expect: 'avg-cpu',
+        note: '-x gives extended statistics like %util (utilization).'
+      }
+    ]
+  },
+  {
+    id: 'a10', num: 30, category: 'Advanced OS / Admin', title: 'Troubleshooting Scenarios',
+    icon: '🕵️', duration: '20 min',
+    objective: 'Troubleshoot high CPU/memory/disk usage scenario.',
+    theory: `When an alert fires, you must find the root cause.
+High Disk Usage: Use df -h and du -sh.
+High CPU/Mem: Use top, ps, and check logs.`,
+    steps: [
+      {
+        title: 'Find full disks',
+        explain: 'Check which partition is out of space.',
+        cmd: 'df -h',
+        expect: 'Mounted on',
+        note: 'Look for Use% near 100%.'
+      },
+      {
+        title: 'Find large files',
+        explain: 'Find the largest directories taking up space.',
+        cmd: 'du -sh /var/log/* | sort -rh | head -n 5',
+        expect: '',
+        note: 'sort -rh sorts in reverse human-readable format.'
+      }
+    ]
+  }
 ];
 
 class LabsManager {
