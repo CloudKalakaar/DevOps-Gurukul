@@ -396,3 +396,35 @@ html, body {
 .category-group.open .category-arrow { transform: rotate(180deg); }
 .category-content { display: none; padding-top: 10px; flex-direction: column; gap: 10px; }
 .category-group.open .category-content { display: flex; }
+
+/* Labs Sub-navigation Filter Bar */
+.labs-filter-bar {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.labs-filter-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #8b9eb5;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  outline: none;
+}
+.labs-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.labs-filter-btn.active {
+  background: rgba(0, 255, 65, 0.15);
+  border-color: rgba(0, 255, 65, 0.5);
+  color: #00ff41;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.15);
+}

@@ -1,14 +1,14 @@
 {
-  "name": "DevOps Gurukul by CloudKalakaar",
-  "short_name": "DevOps Gurukul",
-  "description": "Hands-on DevOps & Linux training by CloudKalakaar — interactive terminal labs for real-world skills",
+  "name": "SRE Survival",
+  "short_name": "SRE Survival",
+  "description": "An RPG-style SRE training game by CloudKalakaar — explore the Operations Center, accept missions, and level up your DevOps skills.",
   "start_url": "/DevOps-Gurukul/",
   "scope": "/DevOps-Gurukul/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0a0e1a",
-  "theme_color": "#00ff41",
-  "categories": ["education", "developer"],
+  "background_color": "#080c14",
+  "theme_color": "#ff5555",
+  "categories": ["education", "games", "developer"],
   "icons": [
     {
       "src": "icons/icon-72.png",
@@ -47,25 +47,10 @@
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
       "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Linux Terminal",
-      "short_name": "Terminal",
-      "description": "Open Linux Terminal Lab",
-      "url": "/DevOps-Gurukul/#linux",
-      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
     }
   ]
 }

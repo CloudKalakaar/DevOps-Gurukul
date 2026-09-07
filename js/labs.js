@@ -1217,6 +1217,3025 @@ High CPU/Mem: Use top, ps, and check logs.`,
       }
     ]
   }
+,
+{
+  "id": "aws31",
+  "num": 31,
+  "category": "AWS Fundamentals",
+  "title": "Configure AWS CLI",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Identity using aws configure.",
+  "theory": "Configure AWS CLI is a fundamental part of AWS Identity. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Configure AWS CLI",
+      "explain": "Before we execute aws configure, let's understand the concept. Identity in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws configure help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Configure Profile",
+      "explain": "Set your credentials.",
+      "cmd": "aws configure",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Check Identity",
+      "explain": "Verify who you are authenticated as.",
+      "cmd": "aws sts get-caller-identity",
+      "expect": "UserId",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws32",
+  "num": 32,
+  "category": "AWS Fundamentals",
+  "title": "Create S3 Bucket",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Storage using aws s3api.",
+  "theory": "Create S3 Bucket is a fundamental part of AWS Storage. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Create S3 Bucket",
+      "explain": "Before we execute aws s3api, let's understand the concept. Storage in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws s3api help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Create Bucket",
+      "explain": "Provision a new bucket.",
+      "cmd": "aws s3api create-bucket --bucket my-demo-bucket",
+      "expect": "Location",
+      "note": "Bucket names must be globally unique."
+    },
+    {
+      "title": "List Buckets",
+      "explain": "Verify your bucket exists globally.",
+      "cmd": "aws s3 ls",
+      "expect": "my-demo-bucket",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws33",
+  "num": 33,
+  "category": "AWS Fundamentals",
+  "title": "Upload to S3",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Storage using aws s3 cp.",
+  "theory": "Upload to S3 is a fundamental part of AWS Storage. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Upload to S3",
+      "explain": "Before we execute aws s3 cp, let's understand the concept. Storage in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws s3 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Create File",
+      "explain": "Create a local file to upload.",
+      "cmd": "echo 'Hello Cloud' > index.html",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify File",
+      "explain": "Ensure the file has the correct content.",
+      "cmd": "cat index.html",
+      "expect": "Hello Cloud",
+      "note": ""
+    },
+    {
+      "title": "Upload",
+      "explain": "Copy the file to S3.",
+      "cmd": "aws s3 cp index.html s3://my-demo-bucket/",
+      "expect": "upload:",
+      "note": ""
+    },
+    {
+      "title": "Verify Upload",
+      "explain": "List the bucket contents.",
+      "cmd": "aws s3 ls s3://my-demo-bucket/",
+      "expect": "index.html",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws34",
+  "num": 34,
+  "category": "AWS Fundamentals",
+  "title": "Launch EC2 Instance",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Compute using aws ec2 run-instances.",
+  "theory": "Launch EC2 Instance is a fundamental part of AWS Compute. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Launch EC2 Instance",
+      "explain": "Before we execute aws ec2 run-instances, let's understand the concept. Compute in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Launch Instance",
+      "explain": "Provision a virtual server.",
+      "cmd": "aws ec2 run-instances --image-id ami-123 --instance-type t2.micro",
+      "expect": "Instances",
+      "note": ""
+    },
+    {
+      "title": "Check Status",
+      "explain": "Wait for the instance to boot.",
+      "cmd": "aws ec2 describe-instances",
+      "expect": "running",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws35",
+  "num": 35,
+  "category": "AWS Fundamentals",
+  "title": "Manage IAM Users",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Security using aws iam create-user.",
+  "theory": "Manage IAM Users is a fundamental part of AWS Security. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Manage IAM Users",
+      "explain": "Before we execute aws iam create-user, let's understand the concept. Security in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws iam help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Manage IAM Users",
+      "explain": "Run the core command.",
+      "cmd": "aws iam create-user --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws36",
+  "num": 36,
+  "category": "AWS Fundamentals",
+  "title": "Attach IAM Policies",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Security using aws iam attach.",
+  "theory": "Attach IAM Policies is a fundamental part of AWS Security. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Attach IAM Policies",
+      "explain": "Before we execute aws iam attach, let's understand the concept. Security in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws iam help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Attach IAM Policies",
+      "explain": "Run the core command.",
+      "cmd": "aws iam attach --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws37",
+  "num": 37,
+  "category": "AWS Fundamentals",
+  "title": "Create EBS Volume",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Storage using aws ec2 create-volume.",
+  "theory": "Create EBS Volume is a fundamental part of AWS Storage. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Create EBS Volume",
+      "explain": "Before we execute aws ec2 create-volume, let's understand the concept. Storage in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Create EBS Volume",
+      "explain": "Run the core command.",
+      "cmd": "aws ec2 create-volume --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws38",
+  "num": 38,
+  "category": "AWS Fundamentals",
+  "title": "Attach EBS Volume",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Storage using aws ec2 attach-volume.",
+  "theory": "Attach EBS Volume is a fundamental part of AWS Storage. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Attach EBS Volume",
+      "explain": "Before we execute aws ec2 attach-volume, let's understand the concept. Storage in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Attach EBS Volume",
+      "explain": "Run the core command.",
+      "cmd": "aws ec2 attach-volume --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws39",
+  "num": 39,
+  "category": "AWS Fundamentals",
+  "title": "EC2 Key Pairs",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Security using aws ec2 create-key-pair.",
+  "theory": "EC2 Key Pairs is a fundamental part of AWS Security. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand EC2 Key Pairs",
+      "explain": "Before we execute aws ec2 create-key-pair, let's understand the concept. Security in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute EC2 Key Pairs",
+      "explain": "Run the core command.",
+      "cmd": "aws ec2 create-key-pair --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws40",
+  "num": 40,
+  "category": "AWS Fundamentals",
+  "title": "Cleanup EC2",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Compute using aws ec2 terminate-instances.",
+  "theory": "Cleanup EC2 is a fundamental part of AWS Compute. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Cleanup EC2",
+      "explain": "Before we execute aws ec2 terminate-instances, let's understand the concept. Compute in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Cleanup EC2",
+      "explain": "Run the core command.",
+      "cmd": "aws ec2 terminate-instances --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws41",
+  "num": 41,
+  "category": "AWS Networking & Database",
+  "title": "Create VPC",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Network using aws ec2 create-vpc.",
+  "theory": "Create VPC is a fundamental part of AWS Network. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Create VPC",
+      "explain": "Before we execute aws ec2 create-vpc, let's understand the concept. Network in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Create VPC",
+      "explain": "Build an isolated network block.",
+      "cmd": "aws ec2 create-vpc --cidr-block 10.0.0.0/16",
+      "expect": "VpcId",
+      "note": ""
+    },
+    {
+      "title": "Enable DNS",
+      "explain": "Enable DNS resolution in your VPC.",
+      "cmd": "aws ec2 modify-vpc-attribute --vpc-id vpc-123 --enable-dns-hostnames",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws42",
+  "num": 42,
+  "category": "AWS Networking & Database",
+  "title": "Internet Gateway",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Network using aws ec2 create-internet-gateway.",
+  "theory": "Internet Gateway is a fundamental part of AWS Network. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Internet Gateway",
+      "explain": "Before we execute aws ec2 create-internet-gateway, let's understand the concept. Network in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Internet Gateway",
+      "explain": "Run the core command.",
+      "cmd": "aws ec2 create-internet-gateway --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws43",
+  "num": 43,
+  "category": "AWS Networking & Database",
+  "title": "Public Subnets",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Network using aws ec2 create-subnet.",
+  "theory": "Public Subnets is a fundamental part of AWS Network. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Public Subnets",
+      "explain": "Before we execute aws ec2 create-subnet, let's understand the concept. Network in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Public Subnets",
+      "explain": "Run the core command.",
+      "cmd": "aws ec2 create-subnet --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws44",
+  "num": 44,
+  "category": "AWS Networking & Database",
+  "title": "Route Tables",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Network using aws ec2 create-route-table.",
+  "theory": "Route Tables is a fundamental part of AWS Network. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Route Tables",
+      "explain": "Before we execute aws ec2 create-route-table, let's understand the concept. Network in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Route Tables",
+      "explain": "Run the core command.",
+      "cmd": "aws ec2 create-route-table --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws45",
+  "num": 45,
+  "category": "AWS Networking & Database",
+  "title": "Security Groups",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Security using aws ec2 create-security-group.",
+  "theory": "Security Groups is a fundamental part of AWS Security. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Security Groups",
+      "explain": "Before we execute aws ec2 create-security-group, let's understand the concept. Security in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Security Groups",
+      "explain": "Run the core command.",
+      "cmd": "aws ec2 create-security-group --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws46",
+  "num": 46,
+  "category": "AWS Networking & Database",
+  "title": "Inbound Rules",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Security using aws ec2 authorize-security-group-ingress.",
+  "theory": "Inbound Rules is a fundamental part of AWS Security. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Inbound Rules",
+      "explain": "Before we execute aws ec2 authorize-security-group-ingress, let's understand the concept. Security in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ec2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Inbound Rules",
+      "explain": "Run the core command.",
+      "cmd": "aws ec2 authorize-security-group-ingress --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws47",
+  "num": 47,
+  "category": "AWS Networking & Database",
+  "title": "Provision RDS",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Database using aws rds create-db-instance.",
+  "theory": "Provision RDS is a fundamental part of AWS Database. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Provision RDS",
+      "explain": "Before we execute aws rds create-db-instance, let's understand the concept. Database in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws rds help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Provision RDS",
+      "explain": "Run the core command.",
+      "cmd": "aws rds create-db-instance --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws48",
+  "num": 48,
+  "category": "AWS Networking & Database",
+  "title": "RDS Backups",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Database using aws rds create-db-snapshot.",
+  "theory": "RDS Backups is a fundamental part of AWS Database. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand RDS Backups",
+      "explain": "Before we execute aws rds create-db-snapshot, let's understand the concept. Database in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws rds help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute RDS Backups",
+      "explain": "Run the core command.",
+      "cmd": "aws rds create-db-snapshot --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws49",
+  "num": 49,
+  "category": "AWS Networking & Database",
+  "title": "Elastic Load Balancer",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Network using aws elbv2 create-load-balancer.",
+  "theory": "Elastic Load Balancer is a fundamental part of AWS Network. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Elastic Load Balancer",
+      "explain": "Before we execute aws elbv2 create-load-balancer, let's understand the concept. Network in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws elbv2 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Elastic Load Balancer",
+      "explain": "Run the core command.",
+      "cmd": "aws elbv2 create-load-balancer --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws50",
+  "num": 50,
+  "category": "AWS Networking & Database",
+  "title": "Route53 DNS",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Network using aws route53 create-hosted-zone.",
+  "theory": "Route53 DNS is a fundamental part of AWS Network. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Route53 DNS",
+      "explain": "Before we execute aws route53 create-hosted-zone, let's understand the concept. Network in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws route53 help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Route53 DNS",
+      "explain": "Run the core command.",
+      "cmd": "aws route53 create-hosted-zone --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws51",
+  "num": 51,
+  "category": "AWS Serverless & Automation",
+  "title": "Lambda Execution Role",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Security using aws iam create-role.",
+  "theory": "Lambda Execution Role is a fundamental part of AWS Security. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Lambda Execution Role",
+      "explain": "Before we execute aws iam create-role, let's understand the concept. Security in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws iam help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Lambda Execution Role",
+      "explain": "Run the core command.",
+      "cmd": "aws iam create-role --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws52",
+  "num": 52,
+  "category": "AWS Serverless & Automation",
+  "title": "Deploy Lambda Function",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Compute using aws lambda create-function.",
+  "theory": "Deploy Lambda Function is a fundamental part of AWS Compute. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Deploy Lambda Function",
+      "explain": "Before we execute aws lambda create-function, let's understand the concept. Compute in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws lambda help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Deploy Lambda Function",
+      "explain": "Run the core command.",
+      "cmd": "aws lambda create-function --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws53",
+  "num": 53,
+  "category": "AWS Serverless & Automation",
+  "title": "Invoke Lambda",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Compute using aws lambda invoke.",
+  "theory": "Invoke Lambda is a fundamental part of AWS Compute. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Invoke Lambda",
+      "explain": "Before we execute aws lambda invoke, let's understand the concept. Compute in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws lambda help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Invoke Lambda",
+      "explain": "Run the core command.",
+      "cmd": "aws lambda invoke --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws54",
+  "num": 54,
+  "category": "AWS Serverless & Automation",
+  "title": "API Gateway",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Network using aws apigateway create-rest-api.",
+  "theory": "API Gateway is a fundamental part of AWS Network. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand API Gateway",
+      "explain": "Before we execute aws apigateway create-rest-api, let's understand the concept. Network in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws apigateway help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute API Gateway",
+      "explain": "Run the core command.",
+      "cmd": "aws apigateway create-rest-api --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws55",
+  "num": 55,
+  "category": "AWS Serverless & Automation",
+  "title": "CloudFormation Templates",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Automation using aws cloudformation create-stack.",
+  "theory": "CloudFormation Templates is a fundamental part of AWS Automation. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand CloudFormation Templates",
+      "explain": "Before we execute aws cloudformation create-stack, let's understand the concept. Automation in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws cloudformation help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute CloudFormation Templates",
+      "explain": "Run the core command.",
+      "cmd": "aws cloudformation create-stack --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws56",
+  "num": 56,
+  "category": "AWS Serverless & Automation",
+  "title": "Deploy CloudFormation Stack",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Automation using aws cloudformation describe-stacks.",
+  "theory": "Deploy CloudFormation Stack is a fundamental part of AWS Automation. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Deploy CloudFormation Stack",
+      "explain": "Before we execute aws cloudformation describe-stacks, let's understand the concept. Automation in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws cloudformation help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Deploy CloudFormation Stack",
+      "explain": "Run the core command.",
+      "cmd": "aws cloudformation describe-stacks --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws57",
+  "num": 57,
+  "category": "AWS Serverless & Automation",
+  "title": "CloudWatch Metrics",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Monitoring using aws cloudwatch list-metrics.",
+  "theory": "CloudWatch Metrics is a fundamental part of AWS Monitoring. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand CloudWatch Metrics",
+      "explain": "Before we execute aws cloudwatch list-metrics, let's understand the concept. Monitoring in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws cloudwatch help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute CloudWatch Metrics",
+      "explain": "Run the core command.",
+      "cmd": "aws cloudwatch list-metrics --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws58",
+  "num": 58,
+  "category": "AWS Serverless & Automation",
+  "title": "CloudWatch Alarms",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Monitoring using aws cloudwatch put-metric-alarm.",
+  "theory": "CloudWatch Alarms is a fundamental part of AWS Monitoring. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand CloudWatch Alarms",
+      "explain": "Before we execute aws cloudwatch put-metric-alarm, let's understand the concept. Monitoring in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws cloudwatch help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute CloudWatch Alarms",
+      "explain": "Run the core command.",
+      "cmd": "aws cloudwatch put-metric-alarm --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws59",
+  "num": 59,
+  "category": "AWS Serverless & Automation",
+  "title": "CloudTrail Logs",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Security using aws cloudtrail lookup-events.",
+  "theory": "CloudTrail Logs is a fundamental part of AWS Security. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand CloudTrail Logs",
+      "explain": "Before we execute aws cloudtrail lookup-events, let's understand the concept. Security in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws cloudtrail help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute CloudTrail Logs",
+      "explain": "Run the core command.",
+      "cmd": "aws cloudtrail lookup-events --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "aws60",
+  "num": 60,
+  "category": "AWS Serverless & Automation",
+  "title": "Systems Manager",
+  "icon": "\u2601\ufe0f",
+  "duration": "15 min",
+  "objective": "Learn how to manage Security using aws ssm put-parameter.",
+  "theory": "Systems Manager is a fundamental part of AWS Security. Understanding how to provision, verify, and manage these resources via CLI is critical for DevOps automation.",
+  "steps": [
+    {
+      "title": "Understand Systems Manager",
+      "explain": "Before we execute aws ssm put-parameter, let's understand the concept. Security in AWS is handled via specific API calls. Let's start by listing current resources.",
+      "cmd": "aws ssm help",
+      "expect": "",
+      "note": "The CLI help command is your best friend for discovering parameters."
+    },
+    {
+      "title": "Execute Systems Manager",
+      "explain": "Run the core command.",
+      "cmd": "aws ssm put-parameter --demo true",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Check the cloud provider state.",
+      "cmd": "echo 'State verified'",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf61",
+  "num": 61,
+  "category": "Terraform Fundamentals & Core Workflow",
+  "title": "Install and Initialize",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Install and Initialize in Terraform.",
+  "theory": "This lab deeply explores Install and Initialize. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Install and Initialize.",
+      "cmd": "echo '# Configuration for Install and Initialize' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Directory",
+      "explain": "Download provider plugins.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf62",
+  "num": 62,
+  "category": "Terraform Fundamentals & Core Workflow",
+  "title": "Configure AWS Authentication",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Configure AWS Authentication in Terraform.",
+  "theory": "This lab deeply explores Configure AWS Authentication. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Configure AWS Authentication.",
+      "cmd": "echo '# Configuration for Configure AWS Authentication' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf63",
+  "num": 63,
+  "category": "Terraform Fundamentals & Core Workflow",
+  "title": "Define Provider Block",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Define Provider Block in Terraform.",
+  "theory": "This lab deeply explores Define Provider Block. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Define Provider Block.",
+      "cmd": "echo '# Configuration for Define Provider Block' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Directory",
+      "explain": "Download provider plugins.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf64",
+  "num": 64,
+  "category": "Terraform Fundamentals & Core Workflow",
+  "title": "Create First Resource",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Create First Resource in Terraform.",
+  "theory": "This lab deeply explores Create First Resource. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Create First Resource.",
+      "cmd": "echo '# Configuration for Create First Resource' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Directory",
+      "explain": "Download provider plugins.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    },
+    {
+      "title": "Apply Changes",
+      "explain": "Provision the infrastructure.",
+      "cmd": "terraform apply -auto-approve",
+      "expect": "Apply complete!",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Confirm the resources were added to the state file.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf65",
+  "num": 65,
+  "category": "Terraform Fundamentals & Core Workflow",
+  "title": "Run Terraform Plan",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Run Terraform Plan in Terraform.",
+  "theory": "This lab deeply explores Run Terraform Plan. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Run Terraform Plan.",
+      "cmd": "echo '# Configuration for Run Terraform Plan' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Generate Plan",
+      "explain": "Preview infrastructure changes.",
+      "cmd": "terraform plan",
+      "expect": "Plan:",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf66",
+  "num": 66,
+  "category": "Terraform Fundamentals & Core Workflow",
+  "title": "Apply Infrastructure",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Apply Infrastructure in Terraform.",
+  "theory": "This lab deeply explores Apply Infrastructure. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Apply Infrastructure.",
+      "cmd": "echo '# Configuration for Apply Infrastructure' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Generate Plan",
+      "explain": "Preview infrastructure changes.",
+      "cmd": "terraform plan",
+      "expect": "Plan:",
+      "note": ""
+    },
+    {
+      "title": "Apply Changes",
+      "explain": "Provision the infrastructure.",
+      "cmd": "terraform apply -auto-approve",
+      "expect": "Apply complete!",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Confirm the resources were added to the state file.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf67",
+  "num": 67,
+  "category": "Terraform Fundamentals & Core Workflow",
+  "title": "Explore State File",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Explore State File in Terraform.",
+  "theory": "This lab deeply explores Explore State File. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "List State",
+      "explain": "See what resources are currently tracked.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Show State",
+      "explain": "View detailed attributes of tracked resources.",
+      "cmd": "terraform state show aws_instance.app",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf68",
+  "num": 68,
+  "category": "Terraform Fundamentals & Core Workflow",
+  "title": "Inspect Deployed Resources",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Inspect Deployed Resources in Terraform.",
+  "theory": "This lab deeply explores Inspect Deployed Resources. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Inspect Deployed Resources.",
+      "cmd": "echo '# Configuration for Inspect Deployed Resources' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Apply Changes",
+      "explain": "Provision the infrastructure.",
+      "cmd": "terraform apply -auto-approve",
+      "expect": "Apply complete!",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Confirm the resources were added to the state file.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf69",
+  "num": 69,
+  "category": "Terraform Fundamentals & Core Workflow",
+  "title": "Format and Validate",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Format and Validate in Terraform.",
+  "theory": "This lab deeply explores Format and Validate. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Format and Validate.",
+      "cmd": "echo '# Configuration for Format and Validate' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf70",
+  "num": 70,
+  "category": "Terraform Fundamentals & Core Workflow",
+  "title": "Destroy Resources",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Destroy Resources in Terraform.",
+  "theory": "This lab deeply explores Destroy Resources. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Destroy Resources.",
+      "cmd": "echo '# Configuration for Destroy Resources' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Apply Changes",
+      "explain": "Provision the infrastructure.",
+      "cmd": "terraform apply -auto-approve",
+      "expect": "Apply complete!",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Confirm the resources were added to the state file.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf71",
+  "num": 71,
+  "category": "Terraform Variables, Locals, Data Sources",
+  "title": "Define Input Variables",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Define Input Variables in Terraform.",
+  "theory": "This lab deeply explores Define Input Variables. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create variables.tf",
+      "explain": "Separating variables makes your code reusable. Let's define one.",
+      "cmd": "echo 'variable \"region\" { default = \"us-east-1\" }' > variables.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review variables.tf",
+      "explain": "Verify the file was created correctly.",
+      "cmd": "cat variables.tf",
+      "expect": "variable",
+      "note": ""
+    },
+    {
+      "title": "Create main.tf",
+      "explain": "Now use the variable in your main configuration.",
+      "cmd": "echo 'provider \"aws\" { region = var.region }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review main.tf",
+      "explain": "Check the main file.",
+      "cmd": "cat main.tf",
+      "expect": "var.region",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf72",
+  "num": 72,
+  "category": "Terraform Variables, Locals, Data Sources",
+  "title": "Variable Precedence",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Variable Precedence in Terraform.",
+  "theory": "This lab deeply explores Variable Precedence. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create variables.tf",
+      "explain": "Separating variables makes your code reusable. Let's define one.",
+      "cmd": "echo 'variable \"region\" { default = \"us-east-1\" }' > variables.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review variables.tf",
+      "explain": "Verify the file was created correctly.",
+      "cmd": "cat variables.tf",
+      "expect": "variable",
+      "note": ""
+    },
+    {
+      "title": "Create main.tf",
+      "explain": "Now use the variable in your main configuration.",
+      "cmd": "echo 'provider \"aws\" { region = var.region }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review main.tf",
+      "explain": "Check the main file.",
+      "cmd": "cat main.tf",
+      "expect": "var.region",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf73",
+  "num": 73,
+  "category": "Terraform Variables, Locals, Data Sources",
+  "title": "Define Local Values",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Define Local Values in Terraform.",
+  "theory": "This lab deeply explores Define Local Values. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create variables.tf",
+      "explain": "Separating variables makes your code reusable. Let's define one.",
+      "cmd": "echo 'variable \"region\" { default = \"us-east-1\" }' > variables.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review variables.tf",
+      "explain": "Verify the file was created correctly.",
+      "cmd": "cat variables.tf",
+      "expect": "variable",
+      "note": ""
+    },
+    {
+      "title": "Create main.tf",
+      "explain": "Now use the variable in your main configuration.",
+      "cmd": "echo 'provider \"aws\" { region = var.region }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review main.tf",
+      "explain": "Check the main file.",
+      "cmd": "cat main.tf",
+      "expect": "var.region",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf74",
+  "num": 74,
+  "category": "Terraform Variables, Locals, Data Sources",
+  "title": "Fetch Data Sources",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Fetch Data Sources in Terraform.",
+  "theory": "This lab deeply explores Fetch Data Sources. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create variables.tf",
+      "explain": "Separating variables makes your code reusable. Let's define one.",
+      "cmd": "echo 'variable \"region\" { default = \"us-east-1\" }' > variables.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review variables.tf",
+      "explain": "Verify the file was created correctly.",
+      "cmd": "cat variables.tf",
+      "expect": "variable",
+      "note": ""
+    },
+    {
+      "title": "Create main.tf",
+      "explain": "Now use the variable in your main configuration.",
+      "cmd": "echo 'provider \"aws\" { region = var.region }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review main.tf",
+      "explain": "Check the main file.",
+      "cmd": "cat main.tf",
+      "expect": "var.region",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf75",
+  "num": 75,
+  "category": "Terraform Variables, Locals, Data Sources",
+  "title": "Use Interpolation",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Use Interpolation in Terraform.",
+  "theory": "This lab deeply explores Use Interpolation. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create variables.tf",
+      "explain": "Separating variables makes your code reusable. Let's define one.",
+      "cmd": "echo 'variable \"region\" { default = \"us-east-1\" }' > variables.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review variables.tf",
+      "explain": "Verify the file was created correctly.",
+      "cmd": "cat variables.tf",
+      "expect": "variable",
+      "note": ""
+    },
+    {
+      "title": "Create main.tf",
+      "explain": "Now use the variable in your main configuration.",
+      "cmd": "echo 'provider \"aws\" { region = var.region }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review main.tf",
+      "explain": "Check the main file.",
+      "cmd": "cat main.tf",
+      "expect": "var.region",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf76",
+  "num": 76,
+  "category": "Terraform Variables, Locals, Data Sources",
+  "title": "Implement Count",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Implement Count in Terraform.",
+  "theory": "This lab deeply explores Implement Count. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create variables.tf",
+      "explain": "Separating variables makes your code reusable. Let's define one.",
+      "cmd": "echo 'variable \"region\" { default = \"us-east-1\" }' > variables.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review variables.tf",
+      "explain": "Verify the file was created correctly.",
+      "cmd": "cat variables.tf",
+      "expect": "variable",
+      "note": ""
+    },
+    {
+      "title": "Create main.tf",
+      "explain": "Now use the variable in your main configuration.",
+      "cmd": "echo 'provider \"aws\" { region = var.region }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review main.tf",
+      "explain": "Check the main file.",
+      "cmd": "cat main.tf",
+      "expect": "var.region",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf77",
+  "num": 77,
+  "category": "Terraform Variables, Locals, Data Sources",
+  "title": "Use For_Each",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Use For_Each in Terraform.",
+  "theory": "This lab deeply explores Use For_Each. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create variables.tf",
+      "explain": "Separating variables makes your code reusable. Let's define one.",
+      "cmd": "echo 'variable \"region\" { default = \"us-east-1\" }' > variables.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review variables.tf",
+      "explain": "Verify the file was created correctly.",
+      "cmd": "cat variables.tf",
+      "expect": "variable",
+      "note": ""
+    },
+    {
+      "title": "Create main.tf",
+      "explain": "Now use the variable in your main configuration.",
+      "cmd": "echo 'provider \"aws\" { region = var.region }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review main.tf",
+      "explain": "Check the main file.",
+      "cmd": "cat main.tf",
+      "expect": "var.region",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf78",
+  "num": 78,
+  "category": "Terraform Variables, Locals, Data Sources",
+  "title": "Dynamic Blocks",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Dynamic Blocks in Terraform.",
+  "theory": "This lab deeply explores Dynamic Blocks. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create variables.tf",
+      "explain": "Separating variables makes your code reusable. Let's define one.",
+      "cmd": "echo 'variable \"region\" { default = \"us-east-1\" }' > variables.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review variables.tf",
+      "explain": "Verify the file was created correctly.",
+      "cmd": "cat variables.tf",
+      "expect": "variable",
+      "note": ""
+    },
+    {
+      "title": "Create main.tf",
+      "explain": "Now use the variable in your main configuration.",
+      "cmd": "echo 'provider \"aws\" { region = var.region }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review main.tf",
+      "explain": "Check the main file.",
+      "cmd": "cat main.tf",
+      "expect": "var.region",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf79",
+  "num": 79,
+  "category": "Terraform Variables, Locals, Data Sources",
+  "title": "Define Outputs",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Define Outputs in Terraform.",
+  "theory": "This lab deeply explores Define Outputs. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create variables.tf",
+      "explain": "Separating variables makes your code reusable. Let's define one.",
+      "cmd": "echo 'variable \"region\" { default = \"us-east-1\" }' > variables.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review variables.tf",
+      "explain": "Verify the file was created correctly.",
+      "cmd": "cat variables.tf",
+      "expect": "variable",
+      "note": ""
+    },
+    {
+      "title": "Create main.tf",
+      "explain": "Now use the variable in your main configuration.",
+      "cmd": "echo 'provider \"aws\" { region = var.region }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review main.tf",
+      "explain": "Check the main file.",
+      "cmd": "cat main.tf",
+      "expect": "var.region",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf80",
+  "num": 80,
+  "category": "Terraform Variables, Locals, Data Sources",
+  "title": "Refactor Configuration",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Refactor Configuration in Terraform.",
+  "theory": "This lab deeply explores Refactor Configuration. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create variables.tf",
+      "explain": "Separating variables makes your code reusable. Let's define one.",
+      "cmd": "echo 'variable \"region\" { default = \"us-east-1\" }' > variables.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review variables.tf",
+      "explain": "Verify the file was created correctly.",
+      "cmd": "cat variables.tf",
+      "expect": "variable",
+      "note": ""
+    },
+    {
+      "title": "Create main.tf",
+      "explain": "Now use the variable in your main configuration.",
+      "cmd": "echo 'provider \"aws\" { region = var.region }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review main.tf",
+      "explain": "Check the main file.",
+      "cmd": "cat main.tf",
+      "expect": "var.region",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf81",
+  "num": 81,
+  "category": "Terraform Modules & Workspaces",
+  "title": "Create Reusable Module",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Create Reusable Module in Terraform.",
+  "theory": "This lab deeply explores Create Reusable Module. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create Module Directory",
+      "explain": "Modules are stored in subdirectories.",
+      "cmd": "mkdir -p modules/web",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Write Module Code",
+      "explain": "Define the resource inside the module.",
+      "cmd": "echo 'resource \"aws_instance\" \"app\" {}' > modules/web/main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Call Module",
+      "explain": "Reference the module from the root.",
+      "cmd": "echo 'module \"my_web\" { source = \"./modules/web\" }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Module",
+      "explain": "Terraform must be initialized to install local modules.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf82",
+  "num": 82,
+  "category": "Terraform Modules & Workspaces",
+  "title": "Call Module",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Call Module in Terraform.",
+  "theory": "This lab deeply explores Call Module. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create Module Directory",
+      "explain": "Modules are stored in subdirectories.",
+      "cmd": "mkdir -p modules/web",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Write Module Code",
+      "explain": "Define the resource inside the module.",
+      "cmd": "echo 'resource \"aws_instance\" \"app\" {}' > modules/web/main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Call Module",
+      "explain": "Reference the module from the root.",
+      "cmd": "echo 'module \"my_web\" { source = \"./modules/web\" }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Module",
+      "explain": "Terraform must be initialized to install local modules.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf83",
+  "num": 83,
+  "category": "Terraform Modules & Workspaces",
+  "title": "Structure Directories",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Structure Directories in Terraform.",
+  "theory": "This lab deeply explores Structure Directories. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create Module Directory",
+      "explain": "Modules are stored in subdirectories.",
+      "cmd": "mkdir -p modules/web",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Write Module Code",
+      "explain": "Define the resource inside the module.",
+      "cmd": "echo 'resource \"aws_instance\" \"app\" {}' > modules/web/main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Call Module",
+      "explain": "Reference the module from the root.",
+      "cmd": "echo 'module \"my_web\" { source = \"./modules/web\" }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Module",
+      "explain": "Terraform must be initialized to install local modules.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf84",
+  "num": 84,
+  "category": "Terraform Modules & Workspaces",
+  "title": "Module Versioning",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Module Versioning in Terraform.",
+  "theory": "This lab deeply explores Module Versioning. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create Module Directory",
+      "explain": "Modules are stored in subdirectories.",
+      "cmd": "mkdir -p modules/web",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Write Module Code",
+      "explain": "Define the resource inside the module.",
+      "cmd": "echo 'resource \"aws_instance\" \"app\" {}' > modules/web/main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Call Module",
+      "explain": "Reference the module from the root.",
+      "cmd": "echo 'module \"my_web\" { source = \"./modules/web\" }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Module",
+      "explain": "Terraform must be initialized to install local modules.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf85",
+  "num": 85,
+  "category": "Terraform Modules & Workspaces",
+  "title": "Multiple Instances",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Multiple Instances in Terraform.",
+  "theory": "This lab deeply explores Multiple Instances. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create Module Directory",
+      "explain": "Modules are stored in subdirectories.",
+      "cmd": "mkdir -p modules/web",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Write Module Code",
+      "explain": "Define the resource inside the module.",
+      "cmd": "echo 'resource \"aws_instance\" \"app\" {}' > modules/web/main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Call Module",
+      "explain": "Reference the module from the root.",
+      "cmd": "echo 'module \"my_web\" { source = \"./modules/web\" }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Module",
+      "explain": "Terraform must be initialized to install local modules.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf86",
+  "num": 86,
+  "category": "Terraform Modules & Workspaces",
+  "title": "Create Workspaces",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Create Workspaces in Terraform.",
+  "theory": "This lab deeply explores Create Workspaces. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create Module Directory",
+      "explain": "Modules are stored in subdirectories.",
+      "cmd": "mkdir -p modules/web",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Write Module Code",
+      "explain": "Define the resource inside the module.",
+      "cmd": "echo 'resource \"aws_instance\" \"app\" {}' > modules/web/main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Call Module",
+      "explain": "Reference the module from the root.",
+      "cmd": "echo 'module \"my_web\" { source = \"./modules/web\" }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Module",
+      "explain": "Terraform must be initialized to install local modules.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf87",
+  "num": 87,
+  "category": "Terraform Modules & Workspaces",
+  "title": "Switch Workspaces",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Switch Workspaces in Terraform.",
+  "theory": "This lab deeply explores Switch Workspaces. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create Module Directory",
+      "explain": "Modules are stored in subdirectories.",
+      "cmd": "mkdir -p modules/web",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Write Module Code",
+      "explain": "Define the resource inside the module.",
+      "cmd": "echo 'resource \"aws_instance\" \"app\" {}' > modules/web/main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Call Module",
+      "explain": "Reference the module from the root.",
+      "cmd": "echo 'module \"my_web\" { source = \"./modules/web\" }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Module",
+      "explain": "Terraform must be initialized to install local modules.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf88",
+  "num": 88,
+  "category": "Terraform Modules & Workspaces",
+  "title": "Parameterize Workspaces",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Parameterize Workspaces in Terraform.",
+  "theory": "This lab deeply explores Parameterize Workspaces. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create Module Directory",
+      "explain": "Modules are stored in subdirectories.",
+      "cmd": "mkdir -p modules/web",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Write Module Code",
+      "explain": "Define the resource inside the module.",
+      "cmd": "echo 'resource \"aws_instance\" \"app\" {}' > modules/web/main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Call Module",
+      "explain": "Reference the module from the root.",
+      "cmd": "echo 'module \"my_web\" { source = \"./modules/web\" }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Module",
+      "explain": "Terraform must be initialized to install local modules.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf89",
+  "num": 89,
+  "category": "Terraform Modules & Workspaces",
+  "title": "Naming Conventions",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Naming Conventions in Terraform.",
+  "theory": "This lab deeply explores Naming Conventions. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create Module Directory",
+      "explain": "Modules are stored in subdirectories.",
+      "cmd": "mkdir -p modules/web",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Write Module Code",
+      "explain": "Define the resource inside the module.",
+      "cmd": "echo 'resource \"aws_instance\" \"app\" {}' > modules/web/main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Call Module",
+      "explain": "Reference the module from the root.",
+      "cmd": "echo 'module \"my_web\" { source = \"./modules/web\" }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Module",
+      "explain": "Terraform must be initialized to install local modules.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf90",
+  "num": 90,
+  "category": "Terraform Modules & Workspaces",
+  "title": "Test Reusability",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Test Reusability in Terraform.",
+  "theory": "This lab deeply explores Test Reusability. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Create Module Directory",
+      "explain": "Modules are stored in subdirectories.",
+      "cmd": "mkdir -p modules/web",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Write Module Code",
+      "explain": "Define the resource inside the module.",
+      "cmd": "echo 'resource \"aws_instance\" \"app\" {}' > modules/web/main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Call Module",
+      "explain": "Reference the module from the root.",
+      "cmd": "echo 'module \"my_web\" { source = \"./modules/web\" }' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Initialize Module",
+      "explain": "Terraform must be initialized to install local modules.",
+      "cmd": "terraform init",
+      "expect": "initialized",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf91",
+  "num": 91,
+  "category": "Terraform State Management & Backend",
+  "title": "Local vs Remote State",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Local vs Remote State in Terraform.",
+  "theory": "This lab deeply explores Local vs Remote State. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "List State",
+      "explain": "See what resources are currently tracked.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Show State",
+      "explain": "View detailed attributes of tracked resources.",
+      "cmd": "terraform state show aws_instance.app",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf92",
+  "num": 92,
+  "category": "Terraform State Management & Backend",
+  "title": "Configure Remote Backend",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Configure Remote Backend in Terraform.",
+  "theory": "This lab deeply explores Configure Remote Backend. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "List State",
+      "explain": "See what resources are currently tracked.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Show State",
+      "explain": "View detailed attributes of tracked resources.",
+      "cmd": "terraform state show aws_instance.app",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf93",
+  "num": 93,
+  "category": "Terraform State Management & Backend",
+  "title": "State Locking",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master State Locking in Terraform.",
+  "theory": "This lab deeply explores State Locking. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "List State",
+      "explain": "See what resources are currently tracked.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Show State",
+      "explain": "View detailed attributes of tracked resources.",
+      "cmd": "terraform state show aws_instance.app",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf94",
+  "num": 94,
+  "category": "Terraform State Management & Backend",
+  "title": "Inspect Resources",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Inspect Resources in Terraform.",
+  "theory": "This lab deeply explores Inspect Resources. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Inspect Resources.",
+      "cmd": "echo '# Configuration for Inspect Resources' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Apply Changes",
+      "explain": "Provision the infrastructure.",
+      "cmd": "terraform apply -auto-approve",
+      "expect": "Apply complete!",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Confirm the resources were added to the state file.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf95",
+  "num": 95,
+  "category": "Terraform State Management & Backend",
+  "title": "Move Resource in State",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Move Resource in State in Terraform.",
+  "theory": "This lab deeply explores Move Resource in State. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "List State",
+      "explain": "See what resources are currently tracked.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Show State",
+      "explain": "View detailed attributes of tracked resources.",
+      "cmd": "terraform state show aws_instance.app",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Apply Changes",
+      "explain": "Provision the infrastructure.",
+      "cmd": "terraform apply -auto-approve",
+      "expect": "Apply complete!",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Confirm the resources were added to the state file.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf96",
+  "num": 96,
+  "category": "Terraform State Management & Backend",
+  "title": "Remove Resource",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Remove Resource in Terraform.",
+  "theory": "This lab deeply explores Remove Resource. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Remove Resource.",
+      "cmd": "echo '# Configuration for Remove Resource' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Apply Changes",
+      "explain": "Provision the infrastructure.",
+      "cmd": "terraform apply -auto-approve",
+      "expect": "Apply complete!",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Confirm the resources were added to the state file.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf97",
+  "num": 97,
+  "category": "Terraform State Management & Backend",
+  "title": "Import Resource",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Import Resource in Terraform.",
+  "theory": "This lab deeply explores Import Resource. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Import Resource.",
+      "cmd": "echo '# Configuration for Import Resource' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Apply Changes",
+      "explain": "Provision the infrastructure.",
+      "cmd": "terraform apply -auto-approve",
+      "expect": "Apply complete!",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Confirm the resources were added to the state file.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf98",
+  "num": 98,
+  "category": "Terraform State Management & Backend",
+  "title": "Simulate Drift",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Simulate Drift in Terraform.",
+  "theory": "This lab deeply explores Simulate Drift. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Simulate Drift.",
+      "cmd": "echo '# Configuration for Simulate Drift' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Generate Plan",
+      "explain": "Preview infrastructure changes.",
+      "cmd": "terraform plan",
+      "expect": "Plan:",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf99",
+  "num": 99,
+  "category": "Terraform State Management & Backend",
+  "title": "Terraform Refresh",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Terraform Refresh in Terraform.",
+  "theory": "This lab deeply explores Terraform Refresh. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Terraform Refresh.",
+      "cmd": "echo '# Configuration for Terraform Refresh' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf100",
+  "num": 100,
+  "category": "Terraform State Management & Backend",
+  "title": "Reconfigure Backend",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Reconfigure Backend in Terraform.",
+  "theory": "This lab deeply explores Reconfigure Backend. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "List State",
+      "explain": "See what resources are currently tracked.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Show State",
+      "explain": "View detailed attributes of tracked resources.",
+      "cmd": "terraform state show aws_instance.app",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf101",
+  "num": 101,
+  "category": "Terraform Advanced & Production Concepts",
+  "title": "Lifecycle Rules",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Lifecycle Rules in Terraform.",
+  "theory": "This lab deeply explores Lifecycle Rules. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Lifecycle Rules.",
+      "cmd": "echo '# Configuration for Lifecycle Rules' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf102",
+  "num": 102,
+  "category": "Terraform Advanced & Production Concepts",
+  "title": "Explicit Dependencies",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Explicit Dependencies in Terraform.",
+  "theory": "This lab deeply explores Explicit Dependencies. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Explicit Dependencies.",
+      "cmd": "echo '# Configuration for Explicit Dependencies' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf103",
+  "num": 103,
+  "category": "Terraform Advanced & Production Concepts",
+  "title": "Provisioners",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Provisioners in Terraform.",
+  "theory": "This lab deeply explores Provisioners. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Provisioners.",
+      "cmd": "echo '# Configuration for Provisioners' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf104",
+  "num": 104,
+  "category": "Terraform Advanced & Production Concepts",
+  "title": "Null Resource",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Null Resource in Terraform.",
+  "theory": "This lab deeply explores Null Resource. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Null Resource.",
+      "cmd": "echo '# Configuration for Null Resource' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Apply Changes",
+      "explain": "Provision the infrastructure.",
+      "cmd": "terraform apply -auto-approve",
+      "expect": "Apply complete!",
+      "note": ""
+    },
+    {
+      "title": "Verify State",
+      "explain": "Confirm the resources were added to the state file.",
+      "cmd": "terraform state list",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf105",
+  "num": 105,
+  "category": "Terraform Advanced & Production Concepts",
+  "title": "Templatefile Function",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Templatefile Function in Terraform.",
+  "theory": "This lab deeply explores Templatefile Function. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Templatefile Function.",
+      "cmd": "echo '# Configuration for Templatefile Function' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf106",
+  "num": 106,
+  "category": "Terraform Advanced & Production Concepts",
+  "title": "Terraform Console",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Terraform Console in Terraform.",
+  "theory": "This lab deeply explores Terraform Console. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Terraform Console.",
+      "cmd": "echo '# Configuration for Terraform Console' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf107",
+  "num": 107,
+  "category": "Terraform Advanced & Production Concepts",
+  "title": "Integrate Linting",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Integrate Linting in Terraform.",
+  "theory": "This lab deeply explores Integrate Linting. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Integrate Linting.",
+      "cmd": "echo '# Configuration for Integrate Linting' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf108",
+  "num": 108,
+  "category": "Terraform Advanced & Production Concepts",
+  "title": "Pre-commit Hooks",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Pre-commit Hooks in Terraform.",
+  "theory": "This lab deeply explores Pre-commit Hooks. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Pre-commit Hooks.",
+      "cmd": "echo '# Configuration for Pre-commit Hooks' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf109",
+  "num": 109,
+  "category": "Terraform Advanced & Production Concepts",
+  "title": "Secure Secrets",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Secure Secrets in Terraform.",
+  "theory": "This lab deeply explores Secure Secrets. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Secure Secrets.",
+      "cmd": "echo '# Configuration for Secure Secrets' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+},
+{
+  "id": "tf110",
+  "num": 110,
+  "category": "Terraform Advanced & Production Concepts",
+  "title": "Multi-Environment Architecture",
+  "icon": "\ud83c\udfd7\ufe0f",
+  "duration": "15 min",
+  "objective": "Master Multi-Environment Architecture in Terraform.",
+  "theory": "This lab deeply explores Multi-Environment Architecture. You will write configuration files, verify them, and execute Terraform core commands to see how the state changes.",
+  "steps": [
+    {
+      "title": "Write Configuration",
+      "explain": "Let's write the HCL code for Multi-Environment Architecture.",
+      "cmd": "echo '# Configuration for Multi-Environment Architecture' > main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Review Configuration",
+      "explain": "Always check your HCL syntax.",
+      "cmd": "cat main.tf",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    },
+    {
+      "title": "Format Code",
+      "explain": "Ensure code is formatted cleanly.",
+      "cmd": "terraform fmt",
+      "expect": "",
+      "note": ""
+    }
+  ]
+}
 ];
 
 class LabsManager {

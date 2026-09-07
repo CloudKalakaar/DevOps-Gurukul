@@ -1,14 +1,38 @@
 // ── Labs UI ─────────────────────────────────────────────────────
+window.currentLabsFilter = 'linux';
+
+function openLabsCategory(filter) {
+  setLabsFilter(filter);
+  document.querySelector('.nav-item[data-section=labs]').click();
+}
+
+function setLabsFilter(filter) {
+  window.currentLabsFilter = filter;
+  var btns = document.querySelectorAll('.labs-filter-btn');
+  btns.forEach(function(btn) {
+    if (btn.dataset.filter === filter) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+  renderLabsList();
+}
+
 function renderLabsList() {
   const list = document.getElementById('labs-list');
   const prog = document.getElementById('labs-overall-progress');
   if (!list) return;
   const total = labsMgr.getTotalProgress();
-  prog.textContent = total.done + '/' + total.total + ' steps done';
+  prog.textContent = total.done + '/' + total.total + ' steps done overall';
   list.innerHTML = '';
   
   var categories = {};
   LABS.forEach(function(lab) {
+    var lowerCat = lab.category.toLowerCase();
+    var majorCat = 'linux';
+    if (lowerCat.includes('aws')) majorCat = 'aws';
+    if (lowerCat.includes('terraform')) majorCat = 'terraform';
+    
+    if (majorCat !== window.currentLabsFilter) return;
+
     if (!categories[lab.category]) categories[lab.category] = [];
     categories[lab.category].push(lab);
   });

@@ -2,113 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#00ff41"/>
-  <meta name="description" content="DevOps Gurukul by CloudKalakaar — hands-on Linux terminal labs, simulated DevOps environment"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"/>
+  <meta name="theme-color" content="#060910"/>
+  <meta name="description" content="SRE Survival — Among Us style 2D IT Corporate Campus Game"/>
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="DevOps Gurukul"/>
-  <title>DevOps Gurukul by CloudKalakaar</title>
+  <meta name="apple-mobile-web-app-title" content="SRE Survival"/>
+  <title>SRE Survival — IT Campus Game</title>
   <link rel="manifest" href="manifest.json"/>
   <link rel="apple-touch-icon" href="icons/icon-192.png"/>
   <link rel="icon" type="image/png" href="icons/icon-192.png"/>
   <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/game.css"/>
 </head>
 <body>
 <div class="app">
 
-  <!-- Header -->
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
   <header class="header">
     <div class="header-logo">
-      <div class="logo-icon">&gt;_</div>
+      <div class="logo-icon">⚡</div>
       <div>
-        <h1>DevOps Gurukul</h1>
-        <div class="header-sub">by CloudKalakaar</div>
+        <h1>SRE Survival</h1>
+        <div class="header-sub">IT Office Campus</div>
       </div>
     </div>
-    <div style="display:flex; align-items:center; gap:12px;">
-      <button id="btn-refresh" class="btn-refresh" aria-label="Refresh App" title="Pull latest updates" style="background:transparent; border:1px solid rgba(255,255,255,0.2); color:#fff; width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:background 0.2s;">↻</button>
-      <div class="header-status">
-        <div class="status-dot"></div>
-        LIVE
-      </div>
+
+    <!-- Live HUD: Rank + XP -->
+    <div class="hud-bar">
+      <div id="hud-rank" class="hud-rank">🔰 Probationary SRE</div>
+      <div id="hud-xp"   class="hud-xp">0 XP</div>
+      <div class="hud-xp-track"><div id="hud-xp-bar" style="width:0%"></div></div>
+    </div>
+
+    <!-- Controls: Sound Toggle + LIVE + Refresh -->
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button id="btn-sound-toggle" onclick="cyberAudio.toggleMute()" title="Toggle Sound FX"
+        style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;font-size:13px;border-radius:6px;cursor:pointer;padding:4px 8px;">🔊</button>
+      <div class="header-status"><span class="status-dot"></span><span>LIVE</span></div>
+      <button id="btn-refresh" title="Clear cache &amp; reload"
+        style="background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;padding:4px;">↺</button>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="main">
+  <!-- ═══════════════════ MAIN ═══════════════════ -->
+  <div class="main">
 
-    <!-- Home Section -->
-    <section class="section active" id="section-home">
-      <div class="home-hero">
-        <div class="hero-badge">🚀 v1.1 · CloudKalakaar</div>
-        <h2 class="hero-title">DevOps Gurukul<br/>by CloudKalakaar</h2>
-        <p class="hero-sub">Hands-on labs, live terminal, real commands. Learn Linux, Docker, CI/CD and more — from your phone.</p>
-      </div>
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         SECTION: GAME — Among Us Style 2D IT Office
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section class="section active" id="section-game">
+      <div class="game-stage-wrapper">
 
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-val">50+</div>
-          <div class="stat-label">Commands</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-val" id="stat-labs">30</div>
-          <div class="stat-label">Labs</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-val">∞</div>
-          <div class="stat-label">Practice</div>
-        </div>
-      </div>
+        <!-- Top PagerDuty Incident Alert Banner -->
+        <div id="incident-alert-banner" class="incident-alert-banner"></div>
 
-      <div class="modules-grid">
-        <div class="module-card" style="--accent-color:rgba(0,255,65,0.3)" data-section="linux" onclick="document.querySelector('.nav-item[data-section=linux]').click()">
-          <div class="module-badge badge-live">LIVE</div>
-          <div class="module-icon">🐧</div>
-          <div class="module-name">Linux Terminal</div>
-          <div class="module-desc">Real bash environment. Run commands, manage files.</div>
+        <!-- 2D Canvas Game World -->
+        <canvas id="office-canvas"></canvas>
+
+        <!-- 1. Top Among Us Green Task Bar -->
+        <div class="among-top-bar">
+          <div class="among-task-label" id="among-task-pct">TOTAL TASKS COMPLETED (0/110)</div>
+          <div class="among-task-track">
+            <div class="among-task-fill" id="among-task-fill" style="width:2%;"></div>
+          </div>
         </div>
-        <div class="module-card" style="--accent-color:rgba(0,255,65,0.3)" data-section="labs" onclick="document.querySelector('.nav-item[data-section=labs]').click()">
-          <div class="module-badge badge-live">LIVE</div>
-          <div class="module-icon">🧪</div>
-          <div class="module-name">Labs</div>
-          <div class="module-desc">30 labs from beginner to advanced OS admin.</div>
+
+        <!-- 2. Left Pinned Tasks (Among Us Checklist) -->
+        <div class="among-task-list" id="among-task-list"></div>
+
+        <!-- 3. Bottom-Right Action Buttons: [MAP] and [USE] -->
+        <div class="among-actions-hud">
+          <div class="among-btn map-btn" id="btn-map-action" title="Open Admin Mini-Map (Hotkey: M)">
+            <div class="among-btn-icon">🗺️</div>
+            <div class="among-btn-title">MAP</div>
+            <div class="use-hint">[M]</div>
+          </div>
+
+          <div class="among-btn use-btn" id="btn-use-action" title="Interact with Workstation (Hotkey: SPACE / E)">
+            <div class="among-btn-icon">⚡</div>
+            <div class="among-btn-title">USE</div>
+            <div class="use-hint">STAND NEAR DESK</div>
+          </div>
         </div>
-        <div class="module-card coming-soon" style="--accent-color:rgba(139,233,253,0.3)">
-          <div class="module-badge badge-soon">SOON</div>
-          <div class="module-icon">🐳</div>
-          <div class="module-name">Docker</div>
-          <div class="module-desc">Containers, images, compose & orchestration.</div>
-        </div>
-        <div class="module-card coming-soon" style="--accent-color:rgba(189,147,249,0.3)">
-          <div class="module-badge badge-soon">SOON</div>
-          <div class="module-icon">⚙️</div>
-          <div class="module-name">CI/CD</div>
-          <div class="module-desc">Pipelines, GitHub Actions, Jenkins.</div>
-        </div>
-        <div class="module-card coming-soon" style="--accent-color:rgba(255,121,198,0.3)">
-          <div class="module-badge badge-soon">SOON</div>
-          <div class="module-icon">☁️</div>
-          <div class="module-name">Cloud / AWS</div>
-          <div class="module-desc">EC2, S3, IAM and cloud architecture.</div>
-        </div>
-        <div class="module-card coming-soon" style="--accent-color:rgba(241,250,140,0.3)">
-          <div class="module-badge badge-soon">SOON</div>
-          <div class="module-icon">🏗️</div>
-          <div class="module-name">Terraform</div>
-          <div class="module-desc">Infrastructure as Code. Plan, apply, destroy.</div>
-        </div>
-        <div class="module-card coming-soon" style="--accent-color:rgba(255,85,85,0.3)">
-          <div class="module-badge badge-soon">SOON</div>
-          <div class="module-icon">🎯</div>
-          <div class="module-name">Kubernetes</div>
-          <div class="module-desc">K8s pods, deployments and services.</div>
-        </div>
-      </div>
+
+        <!-- Touch joystick indicator hint for mobile -->
+        <div class="virtual-joystick-zone">TAP TO WALK</div>
+
+      </div><!-- /.game-stage-wrapper -->
     </section>
 
-    <!-- Linux Terminal Section -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         SECTION: TERMINAL (Dedicated Full Shell)
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
     <section class="section" id="section-linux">
       <div class="term-topbar">
         <div class="term-dots">
@@ -116,80 +103,179 @@
           <div class="term-dot dot-yellow"></div>
           <div class="term-dot dot-green"></div>
         </div>
-        <div class="term-title">devops@devops-lab: ~</div>
-        <button class="term-clear-btn" onclick="document.getElementById('terminal-output').innerHTML=''">clear</button>
+        <div class="term-title">sre@it-campus: ~</div>
+        <button class="term-clear-btn"
+          onclick="document.getElementById('terminal-output').innerHTML=''">clear</button>
       </div>
       <div id="terminal-area">
         <div id="terminal-output"></div>
         <div class="term-input-row">
           <div class="input-prompt">
-            <span id="prompt-user-disp">devops@devops-lab</span><span class="input-prompt-sep">:</span><span id="prompt-path-disp">~</span><span class="input-prompt-sign">$</span>
+            <span id="prompt-user-disp">sre@it-campus</span><span class="input-prompt-sep">:</span><span id="prompt-path-disp">~</span><span class="input-prompt-sign">$</span>
           </div>
-          <input id="terminal-input" type="text" inputmode="text" enterkeyhint="send" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="type a command..."/>
+          <input id="terminal-input" type="text" inputmode="text" enterkeyhint="send"
+            autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
+            placeholder="type a command..."/>
           <button class="input-enter-btn" onclick="submitInput()">↵</button>
         </div>
       </div>
     </section>
 
-    <!-- Labs Section -->
-    <section class="section" id="section-labs">
-      <!-- Lab List View -->
-      <div id="labs-list-view" class="labs-view">
-        <div class="labs-header">
-          <div class="labs-header-title">🧪 Labs</div>
-          <div class="labs-header-sub" id="labs-overall-progress">Loading...</div>
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         SECTION: AGENT DOSSIER
+         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <section class="section" id="section-agent">
+      <div class="agent-wrap">
+        <div>
+          <div class="ap-lbl">ENGINEER PROFILE &amp; CLEARANCE</div>
+          <div class="ap-rank-card">
+            <div class="ap-rank-row">
+              <div id="ap-rank-icon" class="ap-rank-icon">🔰</div>
+              <div>
+                <div class="ap-xp-lbl">CURRENT OPERATIONAL RANK</div>
+                <div id="ap-rank-title" class="ap-rank-title">Probationary SRE</div>
+              </div>
+            </div>
+            <div>
+              <div class="ap-xp-lbl">TOTAL XP ACCUMULATED</div>
+              <div id="ap-xp-val" class="ap-xp-val">0</div>
+            </div>
+            <div>
+              <div class="ap-xp-track"><div id="ap-xp-fill" class="ap-xp-fill" style="width:0%"></div></div>
+              <div id="ap-xp-next" class="ap-xp-next"></div>
+            </div>
+          </div>
         </div>
-        <div id="labs-list" class="labs-list"></div>
-      </div>
 
-      <!-- Lab Detail View -->
-      <div id="labs-detail-view" class="labs-view" style="display:none">
-        <div class="lab-detail-header">
-          <button class="lab-back-btn" onclick="showLabsList()">← Back</button>
-          <div class="lab-detail-title" id="lab-detail-title"></div>
-          <button class="lab-reset-btn" id="lab-reset-btn">↺</button>
+        <div>
+          <div class="ap-lbl">CAMPUS INCIDENT METRICS</div>
+          <div class="ap-stats">
+            <div class="ap-stat">
+              <div class="ap-stat-val" id="ap-stat-days">0</div>
+              <div class="ap-stat-lbl">Days on Duty</div>
+            </div>
+            <div class="ap-stat">
+              <div class="ap-stat-val" id="ap-stat-q">0</div>
+              <div class="ap-stat-lbl">Missions Solved</div>
+            </div>
+            <div class="ap-stat">
+              <div class="ap-stat-val" id="ap-stat-badges">0</div>
+              <div class="ap-stat-lbl">Specialist Badges</div>
+            </div>
+          </div>
         </div>
-        <div id="lab-detail-content" class="lab-detail-content"></div>
+
+        <div>
+          <div class="ap-lbl">FACILITY CLEARANCES</div>
+          <div id="ap-floors"></div>
+        </div>
+
+        <div>
+          <div class="ap-lbl">EARNED SPECIALIST BADGES</div>
+          <div class="ap-badges" id="ap-badges-wrap"></div>
+        </div>
       </div>
     </section>
 
-    <!-- Settings Section (placeholder) -->
-    <section class="section" id="section-settings">
-      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;">
-        <div style="font-size:48px">⚙️</div>
-        <div style="font-size:18px;font-weight:700;color:#fff">Settings</div>
-        <div style="font-size:13px;color:var(--text-dim)">Coming soon.</div>
+  </div><!-- /.main -->
+
+  <!-- ═══════════════════ AMONG US MODALS ═══════════════════ -->
+
+  <!-- 1. Interactive Station Task Modal (Among Us Task Screen) -->
+  <div class="among-modal-overlay" id="station-task-modal">
+    <div class="among-task-console">
+      <div class="atc-topbar">
+        <div class="atc-title-box">
+          <div class="atc-room-tag" id="stm-room-tag">COLD DATACENTER // SERVER RACK A1</div>
+          <div class="atc-mission-title" id="stm-mission-title">Mission Title</div>
+        </div>
+        <button class="atc-close-btn" id="btn-close-task" title="Close Task">✕</button>
       </div>
-    </section>
 
-  </main>
+      <div class="atc-npc-strip">
+        <div class="atc-npc-av" id="stm-npc-avatar">👩‍🔧</div>
+        <div class="atc-npc-info">
+          <div class="atc-npc-nm" id="stm-npc-name">MAYA (Server Lead)</div>
+          <div class="atc-npc-dialog" id="stm-npc-dialog">"Check runaway PIDs and optimize the memory footprint."</div>
+        </div>
+        <div class="atc-xp-badge" id="stm-mission-xp">+150 XP</div>
+      </div>
 
-  <!-- Bottom Nav -->
+      <div class="atc-steps-list" id="stm-steps-container"></div>
+    </div>
+  </div>
+
+  <!-- 2. Admin Mini-Map Modal (Among Us Style Holographic Map) -->
+  <div class="among-modal-overlay" id="admin-map-modal">
+    <div class="admin-map-box">
+      <div class="map-header">
+        <div class="map-title">IT CAMPUS // ADMIN BLUEPRINT MAP</div>
+        <button class="atc-close-btn" id="btn-close-map">✕</button>
+      </div>
+
+      <div class="map-schematic-wrap">
+        <!-- Live Player Pin -->
+        <div class="map-player-pin" id="map-player-pin"></div>
+
+        <!-- Room boxes matching world coordinates -->
+        <div class="s-room server">🧊 DATACENTER</div>
+        <div class="s-room noc">📡 NOC CENTER</div>
+        <div class="s-room cloud">☁️ AWS CLOUD</div>
+        <div class="s-room cafe">☕ BREAKROOM</div>
+        <div class="s-room dev">💻 DEV FLOOR</div>
+        <div class="s-room iac">🏗️ TERRAFORM</div>
+        <div class="s-room war">🚨 WAR ROOM</div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:#94a3b8;">
+        <span>🟢 GREEN DOT: YOUR ENGINEER POSITION</span>
+        <button onclick="gameUI.openEmergencyMeeting()" style="background:#ef4444;border:none;color:#fff;font-size:10px;font-weight:900;padding:6px 12px;border-radius:6px;cursor:pointer;">🚨 WAR ROOM MEETING</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Emergency Incident Meeting Modal -->
+  <div class="among-modal-overlay" id="emergency-meeting-modal">
+    <div class="emergency-meeting-box">
+      <div style="font-size:48px;">🚨</div>
+      <div class="em-title">EMERGENCY INCIDENT DECLARED!</div>
+      <div class="em-desc">
+        A critical production outage has been triggered in the IT Campus infrastructure.<br/>
+        All SRE and DevOps engineers are summoned to the Executive War Room table.
+      </div>
+      <button class="em-btn" id="btn-close-emergency">REPORT TO WAR ROOM</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ BOTTOM NAV ═══════════════════ -->
   <nav class="bottom-nav">
-    <button class="nav-item active" data-section="home">
-      <span class="nav-icon">🏠</span>
-      <span class="nav-label">Home</span>
-    </button>
-    <button class="nav-item" data-section="linux">
-      <span class="nav-icon">💻</span>
-      <span class="nav-label">Terminal</span>
-    </button>
-    <button class="nav-item" data-section="labs">
-      <span class="nav-icon">🧪</span>
-      <span class="nav-label">Labs</span>
-    </button>
-    <button class="nav-item" data-section="settings">
-      <span class="nav-icon">⚙️</span>
-      <span class="nav-label">Settings</span>
-    </button>
+    <div class="nav-item active" data-section="game">
+      <div class="nav-icon">🏢</div>
+      <div class="nav-label">IT Campus</div>
+    </div>
+    <div class="nav-item" data-section="linux">
+      <div class="nav-icon">💻</div>
+      <div class="nav-label">Terminal</div>
+    </div>
+    <div class="nav-item" data-section="agent">
+      <div class="nav-icon">👤</div>
+      <div class="nav-label">Agent</div>
+    </div>
   </nav>
-</div>
 
+</div><!-- /.app -->
+
+<!-- Scripts (strict dependency sequence) -->
+<script src="js/sound-fx.js"></script>
 <script src="js/filesystem.js"></script>
 <script src="js/packages.js"></script>
-<script src="js/labs.js"></script>
-<script src="js/labs-ui.js"></script>
 <script src="js/terminal.js"></script>
+<script src="js/labs.js"></script>
+<script src="js/quest-data.js"></script>
+<script src="js/game-engine.js"></script>
+<script src="js/incident-engine.js"></script>
+<script src="js/game-canvas.js"></script>
+<script src="js/game-ui.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

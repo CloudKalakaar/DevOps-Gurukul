@@ -1,13 +1,13 @@
-// App state & navigation
-const fs  = new FileSystem();
-const pkg = new PackageManager(fs);
-const term = new Terminal(fs, pkg);
-const labsMgr = window.LabsManager ? new window.LabsManager() : null;
-let inputHistory = [], histIdx = -1;
-let currentSection = 'home';
-let currentLabId = null;
+// SRE Survival — App Init & Navigation
 
-// ANSI color parser
+const fs   = new FileSystem();
+const pkg  = new PackageManager(fs);
+const term = new Terminal(fs, pkg);
+const game = new GameEngine();
+
+let inputHistory = [], histIdx = -1;
+
+// ── ANSI color parser ──────────────────────────────────────────────
 function ansiToHtml(text) {
   const map = {
     '0':'', '1':'font-weight:bold', '2':'opacity:0.6',
@@ -38,7 +38,7 @@ function appendOutput(html, cssClass = '') {
 }
 
 function appendPromptLine(cmd) {
-  const user = `<span class="prompt-user">devops@devops-lab</span>`;
+  const user = `<span class="prompt-user">sre@ops-center</span>`;
   const sep  = `<span class="prompt-sep">:</span>`;
   const path = `<span class="prompt-path">${fs.promptPath()}</span>`;
   const sign = `<span class="prompt-sign">$</span>`;
@@ -70,7 +70,7 @@ function submitInput() {
 }
 
 function updatePromptDisplay() {
-  document.getElementById('prompt-user-disp').textContent = 'devops@devops-lab';
+  document.getElementById('prompt-user-disp').textContent = 'sre@ops-center';
   document.getElementById('prompt-path-disp').textContent = fs.promptPath();
 }
 
@@ -98,76 +98,62 @@ function autocomplete(val) {
   return val;
 }
 
-// Init terminal
+// ── Terminal banner ───────────────────────────────────────────────
 function initTerminal() {
-  const isMobile = window.innerWidth <= 480;
-  const banner = isMobile
-    ? `\x1b[1;32m >_ DevOps Gurukul\x1b[0m
-\x1b[2m  by CloudKalakaar\x1b[0m
-\x1b[2;33m ⚠  Simulated Linux environment — not a real Ubuntu OS\x1b[0m
-\x1b[32mType \x1b[1mhelp\x1b[0m\x1b[32m to see commands.\x1b[0m
-\x1b[2mSession: ${new Date().toLocaleString()}\x1b[0m`
-    : `\x1b[1;32m
-  ██████╗ ███████╗██╗   ██╗ ██████╗ ██████╗ ███████╗
-  ██╔══██╗██╔════╝██║   ██║██╔═══██╗██╔══██╗██╔════╝
-  ██║  ██║█████╗  ██║   ██║██║   ██║██████╔╝███████╗
-  ██║  ██║██╔══╝  ╚██╗ ██╔╝██║   ██║██╔═══╝ ╚════██║
-  ██████╔╝███████╗ ╚████╔╝ ╚██████╔╝██║     ███████║
-  ╚═════╝ ╚══════╝  ╚═══╝   ╚═════╝ ╚═╝     ╚══════╝
-\x1b[0m\x1b[2m  DevOps Gurukul by CloudKalakaar  |  Simulated Linux Environment\x1b[0m
-\x1b[33m  ⚠  This is a JavaScript simulation — NOT a real Ubuntu OS\x1b[0m
-\x1b[2m  Files persist in localStorage. Packages are simulated.\x1b[0m
-
-\x1b[32mWelcome! Type \x1b[1mhelp\x1b[0m\x1b[32m to see available commands.\x1b[0m
-\x1b[2mSession started: ${new Date().toUTCString()}\x1b[0m
+  const banner = `\x1b[1;31m
+  ███████╗██████╗ ███████╗    ███████╗██╗   ██╗██████╗ ██╗   ██╗██╗██╗   ██╗ █████╗ ██╗
+  ██╔════╝██╔══██╗██╔════╝    ██╔════╝██║   ██║██╔══██╗██║   ██║██║██║   ██║██╔══██╗██║
+  ███████╗██████╔╝█████╗      ███████╗██║   ██║██████╔╝██║   ██║██║██║   ██║███████║██║
+  ╚════██║██╔══██╗██╔══╝      ╚════██║██║   ██║██╔══██╗╚██╗ ██╔╝██║╚██╗ ██╔╝██╔══██║██║
+  ███████║██║  ██║███████╗    ███████║╚██████╔╝██║  ██║ ╚████╔╝ ██║ ╚████╔╝ ██║  ██║███████╗
+  ╚══════╝╚═╝  ╚═╝╚══════╝    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═╝  ╚═══╝  ╚═╝  ╚═╝╚══════╝
+\x1b[0m\x1b[2m  SRE Operations Center — Secure Terminal\x1b[0m
+\x1b[33m  ⚠  Simulated environment — commands are sandboxed, not a real Linux OS\x1b[0m
+\x1b[2m  Use missions in HQ tab to guide your practice. Type \x1b[0m\x1b[32mhelp\x1b[0m\x1b[2m to see commands.\x1b[0m
+\x1b[2m  Session: ${new Date().toUTCString()}\x1b[0m
 `;
   appendOutput(ansiToHtml(banner));
   updatePromptDisplay();
 }
 
-// Event listeners
+// ── DOMContentLoaded ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // Register SW — works for both GitHub Pages and local dev
+  // Register service worker
   if ('serviceWorker' in navigator) {
     const swPath = location.hostname === 'localhost' || location.protocol === 'file:'
-      ? './sw.js'
-      : '/DevOps-Gurukul/sw.js';
+      ? './sw.js' : '/DevOps-Gurukul/sw.js';
     navigator.serviceWorker.register(swPath).catch(() => {});
   }
 
+  // Init game systems
   initTerminal();
-  renderLabsList();
-  const statLabs = document.getElementById('stat-labs');
-  if (statLabs && typeof LABS !== 'undefined') statLabs.textContent = LABS.length;
+  if (document.getElementById('office-canvas')) {
+    window.officeGame = new OfficeGame('office-canvas');
+  }
+  if (typeof initAmongUsUI === 'function') {
+    initAmongUsUI();
+  }
 
+  // Cache refresh button
   const btnRefresh = document.getElementById('btn-refresh');
   if (btnRefresh) {
     btnRefresh.addEventListener('click', () => {
       btnRefresh.style.transform = 'rotate(360deg)';
       btnRefresh.style.transition = 'transform 0.5s ease';
-      
-      let promises = [];
-      if ('caches' in window) {
-        promises.push(caches.keys().then(names => Promise.all(names.map(name => caches.delete(name)))));
-      }
-      if ('serviceWorker' in navigator) {
-        promises.push(navigator.serviceWorker.getRegistrations().then(registrations => 
-          Promise.all(registrations.map(r => r.unregister()))
-        ));
-      }
-      
-      Promise.all(promises).then(() => {
-        setTimeout(() => { window.location.reload(); }, 200);
-      }).catch(() => {
-        setTimeout(() => { window.location.reload(); }, 200);
-      });
+      const promises = [];
+      if ('caches' in window)
+        promises.push(caches.keys().then(names => Promise.all(names.map(n => caches.delete(n)))));
+      if ('serviceWorker' in navigator)
+        promises.push(navigator.serviceWorker.getRegistrations().then(rs => Promise.all(rs.map(r => r.unregister()))));
+      Promise.all(promises).then(() => setTimeout(() => window.location.reload(), 200))
+        .catch(() => setTimeout(() => window.location.reload(), 200));
     });
   }
 
-  const inp = document.getElementById('terminal-input');
+  // Terminal input events
+  const inp      = document.getElementById('terminal-input');
   const termArea = document.getElementById('terminal-area');
 
-  // Focus input on terminal click
   termArea.addEventListener('click', () => inp.focus());
 
   inp.addEventListener('keydown', (e) => {
@@ -187,8 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     else if (e.key === 'c' && e.ctrlKey) {
       appendPromptLine(inp.value + '^C');
-      inp.value = '';
-      histIdx = -1;
+      inp.value = ''; histIdx = -1;
     }
     else if (e.key === 'l' && e.ctrlKey) {
       e.preventDefault();
@@ -196,17 +181,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Nav
+  // Mission back button: return to building view
+  const mdBack = document.getElementById('md-back') || document.getElementById('md-back-btn');
+  if (mdBack) {
+    mdBack.addEventListener('click', () => {
+      showView('view-building');
+      if (typeof renderBuildingTabs === 'function') renderBuildingTabs();
+      if (typeof renderBuildingMap === 'function')  renderBuildingMap();
+      if (typeof streamTasksForFloor === 'function' && typeof currentFloorId !== 'undefined') {
+        streamTasksForFloor(currentFloorId, false);
+      }
+    });
+  }
+
+  // Bottom Nav
   document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
       const sec = item.dataset.section;
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       item.classList.add('active');
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById('section-' + sec).classList.add('active');
-      currentSection = sec;
+      const secEl = document.getElementById('section-' + sec);
+      if (secEl) secEl.classList.add('active');
+
       if (sec === 'linux') setTimeout(() => inp.focus(), 100);
-      if (sec === 'labs') renderLabsList();
+      if (sec === 'agent') renderAgentProfile();
+      if (sec === 'game') {
+        if (window.officeGame) {
+          window.officeGame.resizeCanvas();
+        }
+        if (window.gameUI) {
+          window.gameUI.updateTaskBar();
+          window.gameUI.renderPinnedTasks();
+          window.gameUI.updateHUD();
+        }
+      }
     });
   });
 });
+
+// Expose for game-ui.js (terminal bridge, legacy compat)
+window.submitInput = submitInput;
+window.game = game;

@@ -1,0 +1,718 @@
+/* ═══════════════════════════════════════════════════════════════
+   SRE SURVIVAL — AMONG US STYLE IT OFFICE GAME CSS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Fullscreen Game Stage ───────────────────────────────────── */
+#section-game {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #060910;
+  display: none;
+}
+#section-game.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.game-stage-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#office-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #060910;
+  cursor: crosshair;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   AMONG US HUD OVERLAYS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Top Among Us Green Task Bar ──────────────────────────── */
+.among-top-bar {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.among-task-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 800;
+  color: #00ff41;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 8px rgba(0,255,65,0.6);
+  text-transform: uppercase;
+}
+
+.among-task-track {
+  width: 280px;
+  height: 14px;
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6), inset 0 2px 4px rgba(0,0,0,0.8);
+  position: relative;
+}
+
+.among-task-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00cc33 0%, #00ff41 50%, #50fa7b 100%);
+  width: 5%;
+  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 12px rgba(0,255,65,0.8);
+  position: relative;
+}
+
+/* Segments on task bar */
+.among-task-track::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 26px,
+    rgba(15, 23, 42, 0.9) 26px,
+    rgba(15, 23, 42, 0.9) 28px
+  );
+  pointer-events: none;
+}
+
+/* ── 2. Left Pinned Task List (Among Us Style) ─────────────────── */
+.among-task-list {
+  position: absolute;
+  top: 48px;
+  left: 14px;
+  z-index: 95;
+  max-width: 290px;
+  background: rgba(8, 14, 24, 0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  backdrop-filter: blur(4px);
+  pointer-events: auto;
+}
+
+.pinned-task-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #f1fa8c;
+  cursor: pointer;
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+  transition: color 0.15s;
+}
+.pinned-task-item:hover { color: #fff; text-shadow: 0 0 6px rgba(241,250,140,0.5); }
+.pinned-task-item.done  { color: #00ff41; opacity: 0.75; text-decoration: line-through; }
+.pti-check { font-weight: 800; }
+.pti-room  { color: #8be9fd; font-weight: 700; flex-shrink: 0; }
+.pti-title { color: inherit; }
+
+/* ── 3. Bottom-Right Action Buttons ([USE] & [MAP]) ───────────── */
+.among-actions-hud {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  pointer-events: auto;
+}
+
+.among-btn {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  border: 4px solid #334155;
+  background: #0f172a;
+  color: #64748b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.7), inset 0 0 10px rgba(0,0,0,0.6);
+}
+
+.among-btn-icon { font-size: 26px; }
+.among-btn-title { font-size: 13px; font-weight: 900; letter-spacing: 1px; }
+.use-hint { font-size: 7px; color: #94a3b8; margin-top: 2px; text-align: center; max-width: 68px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Active [USE] button when standing near a workstation! */
+.among-btn.use-btn.active {
+  border-color: #00ff41;
+  background: linear-gradient(135deg, #0b2e17 0%, #061c0d 100%);
+  color: #00ff41;
+  box-shadow: 0 0 25px rgba(0,255,65,0.7), inset 0 0 12px rgba(0,255,65,0.4);
+  transform: scale(1.08);
+  animation: usePulse 1.4s infinite;
+}
+@keyframes usePulse {
+  0%,100% { box-shadow: 0 0 20px rgba(0,255,65,0.6); }
+  50%     { box-shadow: 0 0 35px rgba(0,255,65,1), 0 0 10px #fff; }
+}
+
+.among-btn.map-btn {
+  border-color: #0284c7;
+  background: linear-gradient(135deg, #082f49 0%, #031826 100%);
+  color: #38bdf8;
+  box-shadow: 0 0 15px rgba(56,189,248,0.3);
+}
+.among-btn.map-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(56,189,248,0.6);
+}
+
+/* ── 4. On-Screen Touch Joystick for Mobile ──────────────────── */
+.virtual-joystick-zone {
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.15);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.25);
+}
+@media (min-width: 860px) {
+  .virtual-joystick-zone { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATION TASK MODAL (AMONG US INTERACTIVE TASK SCREEN)
+   ═══════════════════════════════════════════════════════════════ */
+
+.among-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(4, 7, 14, 0.85);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: modalFadeIn 0.2s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.among-task-console {
+  width: 100%;
+  max-width: 620px;
+  max-height: 88vh;
+  background: #0c121e;
+  border: 3px solid #334155;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 0 50px rgba(0,0,0,0.9), 0 0 25px rgba(0,255,65,0.2);
+  position: relative;
+}
+
+/* Console Top Bezel */
+.atc-topbar {
+  background: #1e293b;
+  border-bottom: 2px solid #334155;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.atc-title-box { display: flex; flex-direction: column; gap: 2px; }
+.atc-room-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 800;
+  color: #00ff41;
+  letter-spacing: 2px;
+}
+.atc-mission-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+}
+.atc-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #ef4444;
+  border: 2px solid #b91c1c;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, background 0.15s;
+}
+.atc-close-btn:hover { background: #dc2626; transform: scale(1.08); }
+
+/* NPC Briefing Bar */
+.atc-npc-strip {
+  background: rgba(15, 23, 42, 0.7);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.atc-npc-av { font-size: 26px; }
+.atc-npc-info { flex: 1; }
+.atc-npc-nm { font-size: 12px; font-weight: 800; color: #8be9fd; }
+.atc-npc-dialog { font-size: 12px; color: #94a3b8; font-style: italic; margin-top: 2px; }
+.atc-xp-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #00ff41;
+  background: rgba(0,255,65,0.12);
+  border: 1px solid rgba(0,255,65,0.3);
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+/* Steps List inside Console */
+.atc-steps-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+}
+
+.stm-step-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.stm-step-box.done {
+  border-color: rgba(0,255,65,0.35);
+  background: rgba(0,255,65,0.03);
+}
+
+.stm-step-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.stm-step-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 800;
+  color: #00ff41;
+  background: rgba(0,255,65,0.12);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+.stm-step-title { font-size: 13px; font-weight: 700; color: #fff; flex: 1; }
+.stm-step-tick  { font-size: 14px; color: #64748b; font-weight: 800; }
+.stm-step-box.done .stm-step-tick { color: #00ff41; }
+
+.stm-step-explain { font-size: 12px; color: #94a3b8; line-height: 1.5; margin-bottom: 8px; }
+
+.stm-cmd-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #060910;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.stm-prompt { color: #00ff41; font-weight: 800; }
+.stm-cmd-text { color: #8be9fd; font-size: 12px; flex: 1; word-break: break-all; }
+.stm-copy-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #94a3b8;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 9px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.stm-copy-btn:hover { color: #fff; border-color: #00ff41; }
+
+.stm-step-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.stm-run-btn {
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.stm-run-btn:hover { background: rgba(56, 189, 248, 0.2); }
+.stm-confirm-btn {
+  background: rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  color: #00ff41;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.stm-confirm-btn:hover { background: rgba(0, 255, 65, 0.2); }
+.stm-confirm-btn.undo  { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
+
+/* ═══════════════════════════════════════════════════════════════
+   ADMIN MINI-MAP MODAL (AMONG US STYLE FACILITY MAP)
+   ═══════════════════════════════════════════════════════════════ */
+
+.admin-map-box {
+  width: 100%;
+  max-width: 580px;
+  background: #080f1e;
+  border: 3px solid #0284c7;
+  border-radius: 16px;
+  box-shadow: 0 0 45px rgba(2, 132, 199, 0.4);
+  padding: 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.map-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 900;
+  color: #38bdf8;
+  letter-spacing: 2px;
+}
+
+/* Stylized Holographic IT Blueprint Canvas */
+.map-schematic-wrap {
+  width: 100%;
+  height: 260px;
+  background: #040812;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.map-schematic-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Schematic room blocks */
+.s-room {
+  position: absolute;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.06);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 800;
+  color: #7dd3fc;
+  text-align: center;
+}
+.s-room.cafe   { left: 10px;  top: 145px; width: 95px; height: 100px; }
+.s-room.dev    { left: 115px; top: 140px; width: 110px; height: 105px; }
+.s-room.server { left: 10px;  top: 20px;  width: 95px; height: 110px; border-color: #38bdf8; }
+.s-room.noc    { left: 115px; top: 20px;  width: 110px; height: 105px; border-color: #facc15; }
+.s-room.cloud  { left: 235px; top: 20px;  width: 115px; height: 105px; border-color: #f472b6; }
+.s-room.iac    { left: 235px; top: 140px; width: 115px; height: 105px; border-color: #c084fc; }
+.s-room.war    { left: 140px; top: 4px;   width: 60px; height: 14px; border-color: #ef4444; color: #ef4444; }
+
+/* Player Marker on Map */
+.map-player-pin {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #00ff41;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00ff41;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 20;
+  animation: pinPulse 1.2s infinite;
+}
+@keyframes pinPulse {
+  0%,100% { transform: translate(-50%, -50%) scale(1); }
+  50%     { transform: translate(-50%, -50%) scale(1.3); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EMERGENCY MEETING MODAL
+   ═══════════════════════════════════════════════════════════════ */
+
+.emergency-meeting-box {
+  width: 100%;
+  max-width: 520px;
+  background: #1c090c;
+  border: 4px solid #ef4444;
+  border-radius: 18px;
+  box-shadow: 0 0 60px rgba(239, 68, 68, 0.6);
+  padding: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: emergencyShake 0.4s ease;
+}
+
+@keyframes emergencyShake {
+  0%,100% { transform: translateY(0); }
+  25%     { transform: translateY(-8px); }
+  75%     { transform: translateY(8px); }
+}
+
+.em-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 900;
+  color: #ef4444;
+  letter-spacing: 2px;
+  text-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
+}
+.em-desc {
+  font-size: 13px;
+  color: #fca5a5;
+  line-height: 1.6;
+}
+.em-btn {
+  background: #ef4444;
+  border: none;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: transform 0.15s, background 0.15s;
+}
+.em-btn:hover { background: #dc2626; transform: scale(1.05); }
+
+/* ── HUD Rank Card & Profile ─────────────────────────────────── */
+.hud-bar { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.hud-rank { font-size: 11px; font-weight: 700; color: #00ff41; font-family: 'JetBrains Mono', monospace; }
+.hud-xp   { font-size: 10px; color: #94a3b8; font-family: 'JetBrains Mono', monospace; }
+.hud-xp-track { width: 90px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+#hud-xp-bar { height: 100%; background: linear-gradient(90deg, #00ff41, #38bdf8); border-radius: 2px; transition: width 0.6s ease; }
+
+#section-agent {
+  display: none; flex-direction: column; flex: 1;
+  overflow-y: auto; min-height: 0;
+  background: #060910;
+  scrollbar-width: thin;
+}
+#section-agent.active { display: flex; }
+.agent-wrap { padding: 16px 16px 80px; display: flex; flex-direction: column; gap: 14px; }
+.ap-lbl { font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #94a3b8; margin-bottom: 6px; }
+.ap-rank-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; }
+.ap-rank-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.ap-rank-icon { font-size: 42px; }
+.ap-rank-title { font-size: 18px; font-weight: 800; }
+.ap-xp-lbl { font-size: 10px; color: #94a3b8; font-family: 'JetBrains Mono', monospace; }
+.ap-xp-val { font-size: 26px; font-weight: 800; color: #00ff41; font-family: 'JetBrains Mono', monospace; }
+.ap-xp-track { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+.ap-xp-fill { height: 100%; background: linear-gradient(90deg, #00ff41, #38bdf8); border-radius: 3px; transition: width 0.6s; }
+.ap-xp-next { font-size: 11px; color: #94a3b8; margin-top: 5px; }
+.ap-stats { display: flex; gap: 10px; }
+.ap-stat { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 12px; text-align: center; }
+.ap-stat-val { font-size: 22px; font-weight: 800; color: #fff; }
+.ap-stat-lbl { font-size: 10px; color: #94a3b8; margin-top: 3px; }
+.ap-floor-item { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; }
+.ap-fi-icon { font-size: 20px; flex-shrink: 0; }
+.ap-fi-name { font-size: 12px; font-weight: 600; color: #fff; flex: 1; }
+.ap-fi-prog { font-size: 11px; color: #94a3b8; }
+.ap-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.ap-badge { flex: 1; min-width: 75px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px; text-align: center; }
+.ap-badge-icon { font-size: 26px; }
+.ap-badge-name { font-size: 10px; color: #94a3b8; margin-top: 4px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGERDUTY REAL-TIME INCIDENT ALERT BANNER
+   ═══════════════════════════════════════════════════════════════ */
+
+.incident-alert-banner {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  z-index: 120;
+  max-width: 680px;
+  width: calc(100% - 32px);
+  background: rgba(28, 9, 12, 0.95);
+  border: 2px solid #ef4444;
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.6), inset 0 0 15px rgba(239, 68, 68, 0.2);
+  backdrop-filter: blur(8px);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: auto;
+}
+
+.incident-alert-banner.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.incident-alert-banner.resolved {
+  background: rgba(6, 28, 14, 0.95);
+  border-color: #00ff41;
+  box-shadow: 0 0 35px rgba(0, 255, 65, 0.6), inset 0 0 15px rgba(0, 255, 65, 0.2);
+}
+
+.iab-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.iab-siren { font-size: 20px; animation: sirenStrobe 1s infinite; }
+@keyframes sirenStrobe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+
+.iab-sev {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 900;
+  color: #fff;
+  background: #ef4444;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.iab-ticket {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fca5a5;
+}
+
+.iab-center {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.iab-room {
+  color: #38bdf8;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+}
+.iab-title {
+  color: #fff;
+  font-weight: 700;
+}
+
+.iab-right { flex-shrink: 0; }
+.iab-map-btn {
+  background: rgba(56, 189, 248, 0.2);
+  border: 1px solid #38bdf8;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.iab-map-btn:hover {
+  background: #38bdf8;
+  color: #060910;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.8);
+}
+
+/* Flashing Red Incident Hazard on Admin Map */
+.s-room.incident-hazard {
+  border-color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.28) !important;
+  color: #fff !important;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.8), inset 0 0 10px rgba(239, 68, 68, 0.4) !important;
+  animation: roomHazardPulse 1s infinite !important;
+}
+@keyframes roomHazardPulse {
+  0%,100% { border-color: #ef4444; opacity: 1; }
+  50%     { border-color: #fee2e2; opacity: 0.65; }
+}
+
+/* Flashing [RESPOND / FIX] button when standing near incident station */
+.among-btn.use-btn.incident-alert {
+  border-color: #ef4444 !important;
+  background: linear-gradient(135deg, #450a0a 0%, #1c090c 100%) !important;
+  color: #ef4444 !important;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.8), inset 0 0 15px rgba(239, 68, 68, 0.5) !important;
+  animation: incidentBtnStrobe 1s infinite !important;
+}
+@keyframes incidentBtnStrobe {
+  0%,100% { transform: scale(1.06); box-shadow: 0 0 25px rgba(239,68,68,0.7); }
+  50%     { transform: scale(1.14); box-shadow: 0 0 45px rgba(239,68,68,1), 0 0 15px #fee2e2; }
+}
+

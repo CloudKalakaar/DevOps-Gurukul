@@ -1,25 +1,34 @@
-const CACHE_NAME = 'devops-gurukul-v3';
+const CACHE_NAME = 'sre-survival-v4';
 const ASSETS = [
-  '/DevOps-Gurukul/',
-  '/DevOps-Gurukul/index.html',
-  '/DevOps-Gurukul/css/style.css',
-  '/DevOps-Gurukul/js/app.js',
-  '/DevOps-Gurukul/js/terminal.js',
-  '/DevOps-Gurukul/js/filesystem.js',
-  '/DevOps-Gurukul/js/labs.js',
-  '/DevOps-Gurukul/js/labs-ui.js',
-  '/DevOps-Gurukul/js/packages.js',
-  '/DevOps-Gurukul/icons/icon-192.png',
-  '/DevOps-Gurukul/icons/icon-512.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './css/style.css',
+  './css/game.css',
+  './js/sound-fx.js',
+  './js/filesystem.js',
+  './js/packages.js',
+  './js/terminal.js',
+  './js/labs.js',
+  './js/quest-data.js',
+  './js/game-engine.js',
+  './js/incident-engine.js',
+  './js/game-canvas.js',
+  './js/game-ui.js',
+  './js/app.js',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
 ];
 
-self.addEventListener('install', (e) => {
+self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', (e) => {
+self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
@@ -27,15 +36,8 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-self.addEventListener('fetch', (e) => {
+self.addEventListener('fetch', e => {
   e.respondWith(
-    fetch(e.request)
-      .then(response => {
-        // Dynamically cache the latest files
-        const resClone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(e.request, resClone));
-        return response;
-      })
-      .catch(() => caches.match(e.request).then(cached => cached || caches.match('/DevOps-Gurukul/')))
+    caches.match(e.request).then(cached => cached || fetch(e.request))
   );
 });

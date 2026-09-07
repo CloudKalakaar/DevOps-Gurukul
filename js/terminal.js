@@ -7,11 +7,61 @@ class Terminal {
     this.variables = {};
   }
 
+
+  handleInteractive(input) {
+    if (this.interactiveState === 'aws_configure_1') {
+      this.fs.env['AWS_ACCESS_KEY_ID'] = input;
+      this.interactiveState = 'aws_configure_2';
+      return 'AWS Secret Access Key [None]:';
+    }
+    if (this.interactiveState === 'aws_configure_2') {
+      this.fs.env['AWS_SECRET_ACCESS_KEY'] = input;
+      this.interactiveState = 'aws_configure_3';
+      return 'Default region name [None]:';
+    }
+    if (this.interactiveState === 'aws_configure_3') {
+      this.fs.env['AWS_DEFAULT_REGION'] = input || 'us-east-1';
+      this.interactiveState = 'aws_configure_4';
+      return 'Default output format [None]:';
+    }
+    if (this.interactiveState === 'aws_configure_4') {
+      this.interactiveState = null;
+      return '';
+    }
+    
+    if (this.interactiveState === 'tf_apply_1') {
+      if (input.toLowerCase() === 'yes') {
+        this.interactiveState = null;
+        return 'Apply complete! Resources: 1 added, 0 changed, 0 destroyed.';
+      } else {
+        this.interactiveState = null;
+        return 'Apply cancelled.';
+      }
+    }
+    
+    if (this.interactiveState === 'tf_destroy_1') {
+      if (input.toLowerCase() === 'yes') {
+        this.interactiveState = null;
+        return 'Destroy complete! Resources: 1 destroyed.';
+      } else {
+        this.interactiveState = null;
+        return 'Destroy cancelled.';
+      }
+    }
+    
+    this.interactiveState = null;
+    return '';
+  }
+
   run(input) {
     input = input.trim();
     if (!input) return '';
     this.history.unshift(input);
     this.histIndex = -1;
+
+    if (this.interactiveState) {
+      return this.handleInteractive(input);
+    }
 
     // Handle echo with redirection (echo "text" > file)
     const redirMatch = input.match(/^echo\s+(.*?)\s*(>>?)\s*(\S+)$/);
@@ -130,6 +180,147 @@ class Terminal {
       vmstat: () => 'procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----\n r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st\n 1  0      0  1234M   100M   500M    0    0    10    20  100  200  5  2 93  0  0',
       iostat: () => 'Linux 5.4.0-100-generic (devops-lab) \n\navg-cpu:  %user   %nice %system %iowait  %steal   %idle\n           5.00    0.00    2.00    0.00    0.00   93.00',
       du: () => '500M /var/log/syslog\n100M /var/log/auth.log\n50M  /var/log/dmesg',
+
+      aws: () => {
+        const cmd = args.join(' ');
+        if (cmd.includes('configure')) { this.interactiveState = 'aws_configure_1'; return 'AWS Access Key ID [None]:'; }
+        if (cmd.includes('sts get-caller-identity')) return '{\n  "UserId": "AIDAJQABLZS4A3QDU576Q",\n  "Account": "123456789012",\n  "Arn": "arn:aws:iam::123456789012:user/devops"\n}';
+        if (cmd.includes('s3api create-bucket')) return '{\n  "Location": "/my-app-bucket-99"\n}';
+        if (cmd.includes('s3 cp')) return 'upload: data.txt to s3://my-app-bucket-99/data.txt';
+        if (cmd.includes('s3 ls')) return '2026-07-04 10:00:00        10 data.txt';
+        if (cmd.includes('ec2 run-instances')) return '{\n  "Instances": [\n    {\n      "InstanceId": "i-1234567890abcdef0",\n      "InstanceType": "t2.micro",\n      "State": { "Name": "pending" }\n    }\n  ]\n}';
+        if (cmd.includes('ec2 describe-instances')) return '{\n  "Reservations": [ { "Instances": [ { "InstanceId": "i-1234567890abcdef0" } ] } ]\n}';
+        if (cmd.includes('iam create-user')) return '{\n  "User": { "UserName": "dev-user" }\n}';
+        if (cmd.includes('ec2 terminate-instances')) return '{\n  "TerminatingInstances": [ { "InstanceId": "i-1234567890abcdef0" } ]\n}';
+        if (cmd.includes('ec2 create-vpc')) return '{\n  "Vpc": { "VpcId": "vpc-1234" }\n}';
+        if (cmd.includes('ec2 create-internet-gateway')) return '{\n  "InternetGateway": { "InternetGatewayId": "igw-5678" }\n}';
+        if (cmd.includes('ec2 create-subnet')) return '{\n  "Subnet": { "SubnetId": "subnet-1111" }\n}';
+        if (cmd.includes('ec2 create-route-table')) return '{\n  "RouteTable": { "RouteTableId": "rtb-9999" }\n}';
+        if (cmd.includes('ec2 create-security-group')) return '{\n  "GroupId": "sg-5678"\n}';
+        if (cmd.includes('ec2 authorize-security-group-ingress')) return 'Return: true';
+        if (cmd.includes('rds create-db-instance')) return '{\n  "DBInstance": { "DBInstanceIdentifier": "mydb", "DBInstanceStatus": "creating" }\n}';
+        if (cmd.includes('rds describe-db-instances')) return '{\n  "DBInstances": [ { "DBInstanceStatus": "available" } ]\n}';
+        if (cmd.includes('elbv2 create-load-balancer')) return '{\n  "LoadBalancers": [ { "LoadBalancerArn": "arn:aws:elasticloadbalancing:..." } ]\n}';
+        if (cmd.includes('iam create-role')) return '{\n  "Role": { "RoleName": "lambda-ex", "Arn": "arn:aws:iam::123:role/lambda-ex" }\n}';
+        if (cmd.includes('lambda create-function')) return '{\n  "FunctionArn": "arn:aws:lambda:us-east-1:123:function:my-func",\n  "State": "Active"\n}';
+        if (cmd.includes('lambda invoke')) return '{\n  "StatusCode": 200\n}';
+        if (cmd.includes('apigateway create-rest-api')) return '{\n  "id": "a1b2c3d4e5",\n  "name": "MyAPI"\n}';
+        if (cmd.includes('cloudformation create-stack')) return '{\n  "StackId": "arn:aws:cloudformation:us-east-1:123:stack/my-stack/..."\n}';
+        if (cmd.includes('cloudwatch put-metric-alarm')) return '';
+        if (cmd.includes('cloudtrail lookup-events')) return '{\n  "Events": [ { "EventName": "RunInstances", "Username": "devops" } ]\n}';
+        return '';
+      },
+      zip: () => '  adding: lambda_function.py (deflated 15%)',
+      terraform: () => {
+        const cmd = args.join(' ');
+        if (cmd.includes('version')) return 'Terraform v1.5.0\non linux_amd64';
+        if (cmd.includes('init')) return '\nInitializing the backend...\n\nSuccessfully configured the backend "s3"! Terraform will automatically\nuse this backend unless the backend configuration changes.\n\nTerraform has been successfully initialized!\n';
+        if (cmd.includes('plan')) return 'Terraform used the selected providers to generate the following execution plan.\n\nPlan: 1 to add, 0 to change, 0 to destroy.\n';
+        if (cmd.includes('apply')) {
+          if (cmd.includes('-auto-approve')) return 'Apply complete! Resources: 1 added, 0 changed, 0 destroyed.';
+          this.interactiveState = 'tf_apply_1';
+          return 'Terraform will perform the actions described above.\n  Only \'yes\' will be accepted to approve.\n\n  Enter a value:';
+        }
+        if (cmd.includes('destroy')) {
+          if (cmd.includes('-auto-approve')) return 'Destroy complete! Resources: 1 destroyed.';
+          this.interactiveState = 'tf_destroy_1';
+          return 'Terraform will destroy all your managed infrastructure, as shown above.\n  There is no undo. Only \'yes\' will be accepted to confirm.\n\n  Enter a value:';
+        }
+        if (cmd.includes('state list')) return 'aws_instance.web';
+        if (cmd.includes('fmt')) return 'main.tf\nvariables.tf';
+        if (cmd.includes('workspace list')) return '* default\n  dev\n  prod';
+        if (cmd.includes('workspace new dev')) return 'Created and switched to workspace "dev"';
+        if (cmd.includes('workspace new prod')) return 'Created and switched to workspace "prod"';
+        if (cmd.includes('workspace select default')) return 'Switched to workspace "default"';
+        if (cmd.includes('state show')) return '# aws_instance.web:\nresource "aws_instance" "web" {\n    ami = "ami-123"\n    id  = "i-12345"\n}';
+        if (cmd.includes('state mv')) return 'Move "aws_instance.web" to "aws_instance.frontend"\nSuccessfully moved 1 object(s).';
+        if (cmd.includes('state rm')) return 'Removed aws_instance.frontend\nSuccessfully removed 1 resource instance(s).';
+        if (cmd.includes('import')) return 'aws_instance.frontend: Importing from ID "i-1234567890"...\nImport successful!';
+        if (cmd.includes('console')) return '> ';
+        if (cmd.includes('validate')) return 'Success! The configuration is valid.';
+        if (cmd.includes('refresh')) return 'Refreshing state...';
+        return '';
+      },
+      tflint: () => 'No issues found.',
+      export: () => '',
+
+      aws: () => {
+        const cmd = args.join(' ');
+        if (cmd.includes('--version')) return 'aws-cli/2.7.0 Python/3.9.11 Linux/5.4.0-100-generic';
+        if (cmd.includes('configure')) { this.interactiveState = 'aws_configure_1'; return 'AWS Access Key ID [None]:'; }
+        if (cmd.includes('sts get-caller-identity')) return '{\n  "UserId": "AIDAJQABLZS4A3QDU576Q",\n  "Account": "123456789012",\n  "Arn": "arn:aws:iam::123456789012:user/devops"\n}';
+        if (cmd.includes('s3api create-bucket')) return '{\n  "Location": "/my-app-bucket-99"\n}';
+        if (cmd.includes('s3 cp')) return 'upload: data.txt to s3://my-app-bucket-99/data.txt';
+        if (cmd.includes('s3 ls')) return '2026-07-04 10:00:00        10 data.txt';
+        if (cmd.includes('ec2 run-instances')) return '{\n  "Instances": [\n    {\n      "InstanceId": "i-1234567890abcdef0",\n      "InstanceType": "t2.micro",\n      "State": { "Name": "pending" }\n    }\n  ]\n}';
+        if (cmd.includes('ec2 describe-instances')) return '{\n  "Reservations": [ { "Instances": [ { "InstanceId": "i-1234567890abcdef0", "State": { "Name": "running" } } ] } ]\n}';
+        if (cmd.includes('iam create-user')) return '{\n  "User": { "UserName": "alice" }\n}';
+        if (cmd.includes('iam create-access-key')) return '{\n  "AccessKey": { "AccessKeyId": "AKIAIOSFODNN7EXAMPLE", "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" }\n}';
+        if (cmd.includes('iam attach-user-policy')) return '';
+        if (cmd.includes('iam list-attached-user-policies')) return '{\n  "AttachedPolicies": [ { "PolicyName": "AdministratorAccess", "PolicyArn": "arn:aws:iam::aws:policy/AdministratorAccess" } ]\n}';
+        if (cmd.includes('ec2 create-volume')) return '{\n  "VolumeId": "vol-1234567890abcdef0",\n  "Size": 10,\n  "State": "creating"\n}';
+        if (cmd.includes('ec2 describe-volumes')) return '{\n  "Volumes": [ { "VolumeId": "vol-1234567890abcdef0", "State": "available" } ]\n}';
+        if (cmd.includes('ec2 attach-volume')) return '{\n  "AttachTime": "2026-07-04T10:00:00.000Z",\n  "Device": "/dev/sdf",\n  "InstanceId": "i-1234567890abcdef0",\n  "State": "attaching",\n  "VolumeId": "vol-1234567890abcdef0"\n}';
+        if (cmd.includes('ec2 create-key-pair')) return '{\n  "KeyName": "my-key",\n  "KeyMaterial": "-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"\n}';
+        if (cmd.includes('ec2 describe-key-pairs')) return '{\n  "KeyPairs": [ { "KeyName": "my-key", "KeyFingerprint": "1a:2b:3c:4d:5e:6f:7g:8h:9i:0j:1a:2b:3c:4d:5e:6f" } ]\n}';
+        if (cmd.includes('ec2 terminate-instances')) return '{\n  "TerminatingInstances": [ { "InstanceId": "i-1234567890abcdef0", "CurrentState": { "Code": 32, "Name": "shutting-down" }, "PreviousState": { "Code": 16, "Name": "running" } } ]\n}';
+        if (cmd.includes('ec2 create-vpc')) return '{\n  "Vpc": { "VpcId": "vpc-1234567890abcdef0", "State": "pending", "CidrBlock": "10.0.0.0/16" }\n}';
+        if (cmd.includes('ec2 modify-vpc-attribute')) return '';
+        if (cmd.includes('ec2 create-internet-gateway')) return '{\n  "InternetGateway": { "InternetGatewayId": "igw-1234567890abcdef0" }\n}';
+        if (cmd.includes('ec2 attach-internet-gateway')) return '';
+        if (cmd.includes('ec2 create-subnet')) return '{\n  "Subnet": { "SubnetId": "subnet-1234567890abcdef0", "VpcId": "vpc-1234567890abcdef0", "CidrBlock": "10.0.1.0/24" }\n}';
+        if (cmd.includes('ec2 create-route-table')) return '{\n  "RouteTable": { "RouteTableId": "rtb-1234567890abcdef0", "VpcId": "vpc-1234567890abcdef0" }\n}';
+        if (cmd.includes('ec2 create-route')) return '{\n  "Return": true\n}';
+        if (cmd.includes('ec2 create-security-group')) return '{\n  "GroupId": "sg-1234567890abcdef0"\n}';
+        if (cmd.includes('ec2 authorize-security-group-ingress')) return 'Return: true';
+        if (cmd.includes('rds create-db-instance')) return '{\n  "DBInstance": { "DBInstanceIdentifier": "mydb", "DBInstanceStatus": "creating" }\n}';
+        if (cmd.includes('rds create-db-snapshot')) return '{\n  "DBSnapshot": { "DBSnapshotIdentifier": "mydb-snap", "Status": "creating" }\n}';
+        if (cmd.includes('elbv2 create-load-balancer')) return '{\n  "LoadBalancers": [ { "LoadBalancerArn": "arn:aws:elasticloadbalancing:us-east-1:123:loadbalancer/app/my-alb/123", "DNSName": "my-alb-123.us-east-1.elb.amazonaws.com" } ]\n}';
+        if (cmd.includes('route53 create-hosted-zone')) return '{\n  "HostedZone": { "Id": "/hostedzone/Z1234567890", "Name": "example.com." }\n}';
+        if (cmd.includes('iam create-role')) return '{\n  "Role": { "RoleName": "lambda-ex", "Arn": "arn:aws:iam::123:role/lambda-ex" }\n}';
+        if (cmd.includes('lambda create-function')) return '{\n  "FunctionArn": "arn:aws:lambda:us-east-1:123:function:my-func",\n  "State": "Active"\n}';
+        if (cmd.includes('lambda invoke')) return '{\n  "StatusCode": 200,\n  "ExecutedVersion": "$LATEST"\n}';
+        if (cmd.includes('apigateway create-rest-api')) return '{\n  "id": "a1b2c3d4e5",\n  "name": "MyAPI"\n}';
+        if (cmd.includes('cloudformation create-stack')) return '{\n  "StackId": "arn:aws:cloudformation:us-east-1:123:stack/mystack/123"\n}';
+        if (cmd.includes('cloudwatch list-metrics')) return '{\n  "Metrics": [ { "Namespace": "AWS/EC2", "MetricName": "CPUUtilization" } ]\n}';
+        if (cmd.includes('cloudwatch put-metric-alarm')) return '';
+        if (cmd.includes('cloudtrail lookup-events')) return '{\n  "Events": [ { "EventName": "RunInstances", "Username": "devops" } ]\n}';
+        if (cmd.includes('ssm put-parameter')) return '{\n  "Version": 1\n}';
+        return '';
+      },
+      zip: () => '  adding: func.py (deflated 15%)',
+      terraform: () => {
+        const cmd = args.join(' ');
+        if (cmd.includes('version')) return 'Terraform v1.5.0\non linux_amd64';
+        if (cmd.includes('init')) return '\nInitializing the backend...\n\nSuccessfully configured the backend "s3"! Terraform will automatically\nuse this backend unless the backend configuration changes.\n\nTerraform has been successfully initialized!\n';
+        if (cmd.includes('plan')) return 'Terraform used the selected providers to generate the following execution plan.\n\nPlan: 1 to add, 0 to change, 0 to destroy.\n';
+        if (cmd.includes('apply')) {
+          if (cmd.includes('-auto-approve')) return 'Apply complete! Resources: 1 added, 0 changed, 0 destroyed.';
+          this.interactiveState = 'tf_apply_1';
+          return 'Terraform will perform the actions described above.\n  Only \'yes\' will be accepted to approve.\n\n  Enter a value:';
+        }
+        if (cmd.includes('destroy')) {
+          if (cmd.includes('-auto-approve')) return 'Destroy complete! Resources: 1 destroyed.';
+          this.interactiveState = 'tf_destroy_1';
+          return 'Terraform will destroy all your managed infrastructure, as shown above.\n  There is no undo. Only \'yes\' will be accepted to confirm.\n\n  Enter a value:';
+        }
+        if (cmd.includes('state list')) return 'aws_instance.web\naws_s3_bucket.b';
+        if (cmd.includes('fmt')) return 'main.tf\nvariables.tf';
+        if (cmd.includes('workspace list')) return '* default\n  dev\n  prod';
+        if (cmd.includes('workspace new')) return 'Created and switched to workspace';
+        if (cmd.includes('workspace select')) return 'Switched to workspace';
+        if (cmd.includes('state show')) return '# aws_instance.web:\nresource "aws_instance" "web" {\n    ami = "ami-123"\n    id  = "i-12345"\n}';
+        if (cmd.includes('state mv')) return 'Move "aws_instance.old" to "aws_instance.new"\nSuccessfully moved 1 object(s).';
+        if (cmd.includes('state rm')) return 'Removed aws_instance.new\nSuccessfully removed 1 resource instance(s).';
+        if (cmd.includes('import')) return 'aws_instance.web: Importing from ID "i-1234567890"...\nImport successful!';
+        if (cmd.includes('console')) return '> ';
+        if (cmd.includes('validate')) return 'Success! The configuration is valid.';
+        if (cmd.includes('refresh')) return 'Refreshing state...';
+        if (cmd.includes('show')) return '# aws_s3_bucket.b:\nresource "aws_s3_bucket" "b" {\n    bucket = "my-bucket"\n    id  = "my-bucket"\n}';
+        return '';
+      },
+      tflint: () => 'No issues found.',
+      export: () => '',
 alias: () => 'alias ll=\'ls -la\'\nalias la=\'ls -A\'\nalias l=\'ls -CF\'',
       exit: () => '__EXIT__',
       logout: () => '__EXIT__',
