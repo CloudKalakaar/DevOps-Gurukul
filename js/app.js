@@ -194,32 +194,53 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Navigation Router
+  function navTo(sec) {
+    const secEl = document.getElementById('section-' + sec);
+    if (!secEl) return;
+
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.toggle('active', n.dataset.section === sec);
+    });
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    secEl.classList.add('active');
+
+    const inp = document.getElementById('terminal-input');
+    if (sec === 'linux') {
+      if (inp) setTimeout(() => inp.focus(), 100);
+    }
+    if (sec === 'agent' && typeof renderAgentProfile === 'function') {
+      renderAgentProfile();
+    }
+    if (sec === 'game') {
+      if (window.officeGame) {
+        window.officeGame.resizeCanvas();
+      }
+      if (window.gameUI) {
+        window.gameUI.updateTaskBar();
+        window.gameUI.renderPinnedTasks();
+        window.gameUI.updateHUD();
+      }
+    }
+  }
+
   // Bottom Nav
   document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
-      const sec = item.dataset.section;
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      item.classList.add('active');
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      const secEl = document.getElementById('section-' + sec);
-      if (secEl) secEl.classList.add('active');
-
-      if (sec === 'linux') setTimeout(() => inp.focus(), 100);
-      if (sec === 'agent') renderAgentProfile();
-      if (sec === 'game') {
-        if (window.officeGame) {
-          window.officeGame.resizeCanvas();
-        }
-        if (window.gameUI) {
-          window.gameUI.updateTaskBar();
-          window.gameUI.renderPinnedTasks();
-          window.gameUI.updateHUD();
-        }
-      }
+      navTo(item.dataset.section);
     });
   });
+
+  // Expose global navigation
+  window.navTo = navTo;
 });
 
-// Expose for game-ui.js (terminal bridge, legacy compat)
+// Expose for game-ui.js and incident resolution
 window.submitInput = submitInput;
+window.runCommand = runCommand;
+window.appendOutput = appendOutput;
+window.appendPromptLine = appendPromptLine;
+window.ansiToHtml = ansiToHtml;
 window.game = game;
+window.term = term;
+window.fs = fs;

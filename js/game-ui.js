@@ -325,12 +325,25 @@ class GameUIManager {
       stepDiv.className = `stm-step-box${isDone ? ' done' : ''}`;
       stepDiv.id = `stm-step-${idx}`;
 
+      const cmdEscaped = step.cmd ? step.cmd.replace(/\\/g, '\\\\').replace(/'/g, "\\'") : '';
+
       const cmdBox = step.cmd ? `
         <div class="stm-cmd-row">
           <span class="stm-prompt">$</span>
           <span class="stm-cmd-text">${step.cmd}</span>
-          <button class="stm-copy-btn" onclick="gameUI.copyCmdText('${step.cmd.replace(/'/g, "\\'")}', this)">copy</button>
-        </div>` : '';
+          <button class="stm-copy-btn" onclick="gameUI.copyCmdText('${cmdEscaped}', this)">copy</button>
+        </div>
+        <div class="stm-inline-term" id="stm-inline-term-${idx}" style="display:none;"></div>
+      ` : '';
+
+      const execActions = step.cmd ? `
+        <button class="stm-run-btn" id="stm-btn-exec-${idx}" onclick="gameUI.executeStepCommand('${lab.id}', ${idx}, '${cmdEscaped}')">
+          ⚡ Execute Fix
+        </button>
+        <button class="stm-term-link-btn" onclick="gameUI.openInFullTerminal('${cmdEscaped}')" title="Open in Full Linux Shell">
+          ↗ Full Terminal
+        </button>
+      ` : '';
 
       stepDiv.innerHTML = `
         <div class="stm-step-top">
@@ -341,7 +354,7 @@ class GameUIManager {
         <div class="stm-step-explain">${step.explain}</div>
         ${cmdBox}
         <div class="stm-step-actions">
-          <button class="stm-run-btn" onclick="gameUI.runInMiniTerminal('${step.cmd.replace(/'/g, "\\'")}', ${idx})">💻 Execute in Terminal</button>
+          ${execActions}
           <button class="stm-confirm-btn${isDone ? ' undo' : ''}" onclick="gameUI.toggleStepComplete('${lab.id}', ${idx}, this)">
             ${isDone ? '↩ Undo' : '✓ Mark Verified'}
           </button>
@@ -356,7 +369,90 @@ class GameUIManager {
     if (window.cyberAudio) window.cyberAudio.closeTask();
   }
 
-  // ── Step Completion & Terminal Run ──────────────────────────────
+  // ── Direct Command Execution inside Modal ──────────────────────
+  executeStepCommand(labId, stepIdx, cmd) {
+    const termDiv = document.getElementById(`stm-inline-term-${stepIdx}`);
+    const execBtn = document.getElementById(`stm-btn-exec-${stepIdx}`);
+    const stepBox = document.getElementById(`stm-step-${stepIdx}`);
+    const confirmBtn = stepBox ? stepBox.querySelector('.stm-confirm-btn') : null;
+
+    if (execBtn) {
+      execBtn.disabled = true;
+      execBtn.innerHTML = '⏳ Running...';
+    }
+
+    // Sound effect
+    if (window.cyberAudio) {
+      window.cyberAudio.playTone(560, 'sine', 0.08, 0.04);
+      setTimeout(() => window.cyberAudio && window.cyberAudio.playTone(880, 'triangle', 0.12, 0.04), 100);
+    }
+
+    // Mirror to full terminal prompt history
+    if (typeof window.appendPromptLine === 'function') {
+      window.appendPromptLine(cmd);
+    }
+
+    // Execute via virtual Linux Terminal engine
+    let rawOutput = '';
+    if (window.term && typeof window.term.run === 'function') {
+      rawOutput = window.term.run(cmd);
+      if (typeof window.appendOutput === 'function' && rawOutput) {
+        window.appendOutput(typeof window.ansiToHtml === 'function' ? window.ansiToHtml(rawOutput) : rawOutput);
+      }
+    }
+
+    const htmlOutput = (typeof window.ansiToHtml === 'function')
+      ? window.ansiToHtml(rawOutput || 'Exit code 0: Command completed successfully.')
+      : (rawOutput || 'Exit code 0: Command completed successfully.');
+
+    // Render in-modal terminal output card
+    if (termDiv) {
+      termDiv.style.display = 'block';
+      termDiv.innerHTML = `
+        <div class="sit-header">
+          <span class="sit-dots"><span class="sit-dot r"></span><span class="sit-dot y"></span><span class="sit-dot g"></span></span>
+          <span class="sit-title">bash // incident triage</span>
+          <span class="sit-status">STATUS: OK</span>
+        </div>
+        <div class="sit-body">
+          <div class="sit-prompt-line"><span class="sit-prompt">sre@ops-center:~$</span> <span class="sit-cmd">${cmd}</span></div>
+          <div class="sit-stdout">${htmlOutput}</div>
+        </div>
+      `;
+      stepBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Automatically mark step as completed
+    const isDone = game.getStepDone(labId, stepIdx);
+    if (!isDone) {
+      this.toggleStepComplete(labId, stepIdx, confirmBtn);
+    }
+
+    if (execBtn) {
+      execBtn.disabled = false;
+      execBtn.innerHTML = '✓ Executed';
+    }
+  }
+
+  openInFullTerminal(cmd) {
+    this.closeTaskModal();
+    if (typeof window.navTo === 'function') {
+      window.navTo('linux');
+    }
+    const inp = document.getElementById('terminal-input');
+    if (inp && cmd) {
+      inp.value = cmd;
+      inp.focus();
+    }
+  }
+
+  // Alias for backward compatibility
+  runInMiniTerminal(cmd, stepIdx) {
+    const labId = this.activeLab ? this.activeLab.id : (LABS[0]?.id || 'b01');
+    this.executeStepCommand(labId, stepIdx, cmd);
+  }
+
+  // ── Step Completion & Resolution ──────────────────────────────
   toggleStepComplete(labId, stepIdx, btn) {
     const isDone = game.getStepDone(labId, stepIdx);
     const stepBox = document.getElementById(`stm-step-${stepIdx}`);
@@ -365,18 +461,24 @@ class GameUIManager {
       game.unmarkStep(labId, stepIdx);
       if (stepBox) {
         stepBox.classList.remove('done');
-        stepBox.querySelector('.stm-step-tick').textContent = '○';
+        const tick = stepBox.querySelector('.stm-step-tick');
+        if (tick) tick.textContent = '○';
       }
-      btn.textContent = '✓ Mark Verified';
-      btn.classList.remove('undo');
+      if (btn) {
+        btn.textContent = '✓ Mark Verified';
+        btn.classList.remove('undo');
+      }
     } else {
       const result = game.markStep(labId, stepIdx);
       if (stepBox) {
         stepBox.classList.add('done');
-        stepBox.querySelector('.stm-step-tick').textContent = '✓';
+        const tick = stepBox.querySelector('.stm-step-tick');
+        if (tick) tick.textContent = '✓';
       }
-      btn.textContent = '↩ Undo';
-      btn.classList.add('undo');
+      if (btn) {
+        btn.textContent = '↩ Undo';
+        btn.classList.add('undo');
+      }
 
       // Audio celebration
       if (window.cyberAudio) {
@@ -395,20 +497,17 @@ class GameUIManager {
                             window.incidentEngine.currentIncident.labId === labId;
 
       if (isIncidentLab && (result.questCompleted || game.isQuestCompleted(labId))) {
+        // Show success in modal
+        const npcDialog = document.getElementById('stm-npc-dialog');
+        if (npcDialog) {
+          npcDialog.innerHTML = `
+            <span style="color:#00ff41;font-weight:900;font-size:13px;">✅ INCIDENT RESOLVED!</span><br/>
+            "Outstanding triage, Engineer! Distressed systems restored to normal state."
+          `;
+        }
         window.incidentEngine.resolveCurrentIncident();
-        setTimeout(() => this.closeTaskModal(), 1400);
+        setTimeout(() => this.closeTaskModal(), 2200);
       }
-    }
-  }
-
-  runInMiniTerminal(cmd, stepIdx) {
-    // Switch to Terminal tab and prefill
-    this.closeTaskModal();
-    if (typeof navTo === 'function') navTo('linux');
-    const inp = document.getElementById('terminal-input');
-    if (inp && cmd) {
-      inp.value = cmd;
-      inp.focus();
     }
   }
 

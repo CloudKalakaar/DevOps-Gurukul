@@ -416,6 +416,103 @@
 .stm-confirm-btn:hover { background: rgba(0, 255, 65, 0.2); }
 .stm-confirm-btn.undo  { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
 
+.stm-term-link-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.stm-term-link-btn:hover {
+  color: #fff;
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+}
+
+/* ── Inline Simulated Terminal Output inside Step Box ───────────── */
+.stm-inline-term {
+  margin-top: 8px;
+  background: #040810;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.8), 0 0 14px rgba(0,255,65,0.08);
+  animation: termSlideDown 0.2s ease;
+}
+
+@keyframes termSlideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.sit-header {
+  background: #0f172a;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #1e293b;
+  font-size: 9px;
+  color: #94a3b8;
+}
+
+.sit-dots {
+  display: flex;
+  gap: 4px;
+}
+.sit-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.sit-dot.r { background: #ef4444; }
+.sit-dot.y { background: #eab308; }
+.sit-dot.g { background: #22c55e; }
+
+.sit-title {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+}
+.sit-status {
+  color: #00ff41;
+  font-weight: 800;
+}
+
+.sit-body {
+  padding: 8px 10px;
+  font-size: 11px;
+  line-height: 1.45;
+  max-height: 180px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.sit-prompt-line {
+  margin-bottom: 4px;
+}
+.sit-prompt {
+  color: #00ff41;
+  font-weight: 800;
+}
+.sit-cmd {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.sit-stdout {
+  color: #e2e8f0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    ADMIN MINI-MAP MODAL (AMONG US STYLE FACILITY MAP)
    ═══════════════════════════════════════════════════════════════ */
