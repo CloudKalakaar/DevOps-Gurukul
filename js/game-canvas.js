@@ -36,6 +36,31 @@ class OfficeGame {
     // Visual animated click ping
     this.clickPing = null;
 
+    // Dynamic Floating Virtual Joystick (Among Us Mobile style)
+    this.joystick = {
+      active: false,
+      touchId: null,
+      startX: 0,
+      startY: 0,
+      curX: 0,
+      curY: 0,
+      radius: 48,
+      knobRadius: 22,
+      dx: 0,
+      dy: 0,
+      intensity: 0
+    };
+
+    // Continuous Mouse Drag state (Among Us Desktop style)
+    this.mouseDrag = {
+      active: false,
+      worldX: 0,
+      worldY: 0,
+      downTime: 0,
+      downStartX: 0,
+      downStartY: 0
+    };
+
     // Keys pressed
     this.keys = {};
 
@@ -436,61 +461,170 @@ class OfficeGame {
       this.keys[e.key.toLowerCase()] = false;
     });
 
-    // Mouse click on canvas
+    // ── Mouse Drag & Steering (Desktop Among Us Controls) ──
     this.canvas.addEventListener('mousedown', (e) => {
-      this.handlePointerClick(e.clientX, e.clientY);
+      if (e.button !== 0) return;
+      const rect = this.canvas.getBoundingClientRect();
+      const screenX = e.clientX - rect.left;
+      const screenY = e.clientY - rect.top;
+      const worldX = screenX + this.camera.x;
+      const worldY = screenY + this.camera.y;
+
+      // Check direct station click
+      for (const st of this.stations) {
+        const centerX = st.x + st.w / 2;
+        const centerY = st.y + st.h / 2;
+        if (Math.hypot(worldX - centerX, worldY - centerY) < 48) {
+          this.player.x = st.x < 750 ? st.x + st.w + 22 : st.x - 22;
+          this.player.y = centerY;
+          this.targetPos = null;
+          this.nearStation = st;
+          this.triggerStationAction(st);
+          return;
+        }
+      }
+
+      this.mouseDrag.active = true;
+      this.mouseDrag.worldX = worldX;
+      this.mouseDrag.worldY = worldY;
+      this.mouseDrag.downTime = performance.now();
+      this.mouseDrag.downStartX = screenX;
+      this.mouseDrag.downStartY = screenY;
+      this.targetPos = null;
     });
 
-    // Touch click on canvas
-    this.canvas.addEventListener('touchstart', (e) => {
-      if (e.touches.length > 0) {
-        const t = e.touches[0];
-        this.handlePointerClick(t.clientX, t.clientY);
-      }
-    }, { passive: true });
-
-    // Touch drag movement
-    this.canvas.addEventListener('touchmove', (e) => {
-      if (e.touches.length > 0) {
-        const t = e.touches[0];
+    window.addEventListener('mousemove', (e) => {
+      if (this.mouseDrag.active) {
         const rect = this.canvas.getBoundingClientRect();
-        this.targetPos = {
-          x: t.clientX - rect.left + this.camera.x,
-          y: t.clientY - rect.top  + this.camera.y
-        };
+        this.mouseDrag.worldX = e.clientX - rect.left + this.camera.x;
+        this.mouseDrag.worldY = e.clientY - rect.top + this.camera.y;
       }
-    }, { passive: true });
-  }
+    });
 
-  handlePointerClick(clientX, clientY) {
-    const rect = this.canvas.getBoundingClientRect();
-    const clickX = clientX - rect.left + this.camera.x;
-    const clickY = clientY - rect.top  + this.camera.y;
+    window.addEventListener('mouseup', (e) => {
+      if (this.mouseDrag.active) {
+        const duration = performance.now() - this.mouseDrag.downTime;
+        const rect = this.canvas.getBoundingClientRect();
+        const distMoved = Math.hypot(
+          (e.clientX - rect.left) - this.mouseDrag.downStartX,
+          (e.clientY - rect.top) - this.mouseDrag.downStartY
+        );
 
-    // 1. Did the user click directly on any station or its exclamation mark?
-    for (const st of this.stations) {
-      const centerX = st.x + st.w / 2;
-      const centerY = st.y + st.h / 2;
-      const dist = Math.hypot(clickX - centerX, clickY - centerY);
+        // Single quick click fallback (< 220ms & barely moved)
+        if (duration < 220 && distMoved < 12) {
+          const clickX = e.clientX - rect.left + this.camera.x;
+          const clickY = e.clientY - rect.top  + this.camera.y;
+          this.targetPos = { x: clickX, y: clickY };
+          this.clickPing = { x: clickX, y: clickY, radius: 4, alpha: 1 };
+          if (window.cyberAudio) window.cyberAudio.playTone(600, 'sine', 0.04, 0.02);
+        }
 
-      // Station hit test
-      if (dist < 48) {
-        // Move near station
-        const walkX = st.x < 750 ? st.x + st.w + 22 : st.x - 22;
-        const walkY = centerY;
-        this.player.x = walkX;
-        this.player.y = walkY;
-        this.targetPos = null;
-        this.nearStation = st;
-        this.triggerStationAction(st);
-        return;
+        this.mouseDrag.active = false;
       }
-    }
+    });
 
-    // 2. Set target destination for character to walk to
-    this.targetPos = { x: clickX, y: clickY };
-    this.clickPing = { x: clickX, y: clickY, radius: 4, alpha: 1 };
-    if (window.cyberAudio) window.cyberAudio.playTone(600, 'sine', 0.04, 0.02);
+    // ── Dynamic Floating Touch Joystick (Mobile Among Us Controls) ──
+    this.canvas.addEventListener('touchstart', (e) => {
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const t = e.changedTouches[i];
+        const rect = this.canvas.getBoundingClientRect();
+        const screenX = t.clientX - rect.left;
+        const screenY = t.clientY - rect.top;
+        const worldX = screenX + this.camera.x;
+        const worldY = screenY + this.camera.y;
+
+        // Check if tapping directly on a station
+        let tappedStation = false;
+        for (const st of this.stations) {
+          const centerX = st.x + st.w / 2;
+          const centerY = st.y + st.h / 2;
+          if (Math.hypot(worldX - centerX, worldY - centerY) < 48) {
+            this.player.x = st.x < 750 ? st.x + st.w + 22 : st.x - 22;
+            this.player.y = centerY;
+            this.targetPos = null;
+            this.nearStation = st;
+            this.triggerStationAction(st);
+            tappedStation = true;
+            break;
+          }
+        }
+        if (tappedStation) continue;
+
+        // Spawn dynamic floating joystick at touch location!
+        if (!this.joystick.active) {
+          this.joystick.active = true;
+          this.joystick.touchId = t.identifier;
+          this.joystick.startX = screenX;
+          this.joystick.startY = screenY;
+          this.joystick.curX = screenX;
+          this.joystick.curY = screenY;
+          this.joystick.dx = 0;
+          this.joystick.dy = 0;
+          this.joystick.intensity = 0;
+          this.targetPos = null;
+          break;
+        }
+      }
+    }, { passive: false });
+
+    this.canvas.addEventListener('touchmove', (e) => {
+      if (!this.joystick.active) return;
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        const t = e.changedTouches[i];
+        if (t.identifier === this.joystick.touchId) {
+          e.preventDefault(); // Prevent page drag/scroll
+          const rect = this.canvas.getBoundingClientRect();
+          const screenX = t.clientX - rect.left;
+          const screenY = t.clientY - rect.top;
+
+          const deltaX = screenX - this.joystick.startX;
+          const deltaY = screenY - this.joystick.startY;
+          const dist = Math.hypot(deltaX, deltaY);
+
+          if (dist > 5) {
+            const angle = Math.atan2(deltaY, deltaX);
+            const clampedDist = Math.min(dist, this.joystick.radius);
+
+            this.joystick.curX = this.joystick.startX + Math.cos(angle) * clampedDist;
+            this.joystick.curY = this.joystick.startY + Math.sin(angle) * clampedDist;
+            this.joystick.dx = Math.cos(angle);
+            this.joystick.dy = Math.sin(angle);
+            this.joystick.intensity = Math.min(1, dist / this.joystick.radius);
+
+            // Dynamic base sliding (joystick follows thumb if pulled far)
+            if (dist > this.joystick.radius * 1.35) {
+              const excess = dist - this.joystick.radius * 1.35;
+              this.joystick.startX += Math.cos(angle) * excess;
+              this.joystick.startY += Math.sin(angle) * excess;
+            }
+          } else {
+            this.joystick.curX = screenX;
+            this.joystick.curY = screenY;
+            this.joystick.dx = 0;
+            this.joystick.dy = 0;
+            this.joystick.intensity = 0;
+          }
+          break;
+        }
+      }
+    }, { passive: false });
+
+    const endTouch = (e) => {
+      if (!this.joystick.active) return;
+      for (let i = 0; i < e.changedTouches.length; i++) {
+        if (e.changedTouches[i].identifier === this.joystick.touchId) {
+          this.joystick.active = false;
+          this.joystick.touchId = null;
+          this.joystick.dx = 0;
+          this.joystick.dy = 0;
+          this.joystick.intensity = 0;
+          break;
+        }
+      }
+    };
+
+    this.canvas.addEventListener('touchend', endTouch, { passive: true });
+    this.canvas.addEventListener('touchcancel', endTouch, { passive: true });
   }
 
   // ── Physics & Smooth Collision Sliding ──────────────────────────
@@ -499,17 +633,40 @@ class OfficeGame {
 
     let dx = 0;
     let dy = 0;
+    let speedMult = 1;
 
-    // 1. Keyboard input
-    if (this.keys['w'] || this.keys['arrowup'])    dy -= 1;
-    if (this.keys['s'] || this.keys['arrowdown'])  dy += 1;
-    if (this.keys['a'] || this.keys['arrowleft'])  dx -= 1;
-    if (this.keys['d'] || this.keys['arrowright']) dx += 1;
-
-    // 2. Mouse/Touch Target navigation
-    if (this.targetPos && (dx === 0 && dy === 0)) {
+    // 1. Dynamic Floating Touch Joystick (Among Us mobile primary)
+    if (this.joystick.active && this.joystick.intensity > 0.08) {
+      dx = this.joystick.dx;
+      dy = this.joystick.dy;
+      speedMult = Math.max(0.4, this.joystick.intensity);
+      this.targetPos = null;
+    }
+    // 2. Mouse Drag Navigation (Among Us desktop mouse primary)
+    else if (this.mouseDrag.active) {
+      const distToMouse = Math.hypot(this.mouseDrag.worldX - this.player.x, this.mouseDrag.worldY - this.player.y);
+      if (distToMouse > 16) {
+        dx = (this.mouseDrag.worldX - this.player.x) / distToMouse;
+        dy = (this.mouseDrag.worldY - this.player.y) / distToMouse;
+        speedMult = Math.min(1, distToMouse / 75);
+      }
+      this.targetPos = null;
+    }
+    // 3. Keyboard input
+    else if (this.keys['w'] || this.keys['arrowup'] ||
+             this.keys['s'] || this.keys['arrowdown'] ||
+             this.keys['a'] || this.keys['arrowleft'] ||
+             this.keys['d'] || this.keys['arrowright']) {
+      if (this.keys['w'] || this.keys['arrowup'])    dy -= 1;
+      if (this.keys['s'] || this.keys['arrowdown'])  dy += 1;
+      if (this.keys['a'] || this.keys['arrowleft'])  dx -= 1;
+      if (this.keys['d'] || this.keys['arrowright']) dx += 1;
+      this.targetPos = null;
+    }
+    // 4. Click/Tap Target fallback
+    else if (this.targetPos) {
       const distToTarget = Math.hypot(this.targetPos.x - this.player.x, this.targetPos.y - this.player.y);
-      if (distToTarget > 14) {
+      if (distToTarget > 12) {
         dx = (this.targetPos.x - this.player.x) / distToTarget;
         dy = (this.targetPos.y - this.player.y) / distToTarget;
       } else {
@@ -518,29 +675,34 @@ class OfficeGame {
     }
 
     // Normalize diagonal movement
-    if (dx !== 0 && dy !== 0) {
+    if (dx !== 0 && dy !== 0 && !this.joystick.active && !this.mouseDrag.active) {
       dx *= 0.7071;
       dy *= 0.7071;
     }
 
-    // Update velocity with smooth acceleration
-    const accel = 0.32;
-    this.player.vx += (dx * this.player.speed - this.player.vx) * accel;
-    this.player.vy += (dy * this.player.speed - this.player.vy) * accel;
+    // Snappy acceleration and instant stopping
+    const targetVx = dx * this.player.speed * speedMult;
+    const targetVy = dy * this.player.speed * speedMult;
+    const accel = (dx === 0 && dy === 0) ? 0.45 : 0.36;
+
+    this.player.vx += (targetVx - this.player.vx) * accel;
+    this.player.vy += (targetVy - this.player.vy) * accel;
 
     // Check movement
-    const isMoving = Math.hypot(this.player.vx, this.player.vy) > 0.35;
+    const currentSpeed = Math.hypot(this.player.vx, this.player.vy);
+    const isMoving = currentSpeed > 0.25;
     this.player.moving = isMoving;
 
     if (isMoving) {
-      this.player.stepPhase += dt * 14;
-      if (Math.abs(this.player.vx) > 0.15) {
+      this.player.stepPhase += dt * (11 + currentSpeed * 2);
+      if (Math.abs(this.player.vx) > 0.1) {
         this.player.facingRight = this.player.vx > 0;
       }
-      // Play footstep audio
       if (window.cyberAudio) window.cyberAudio.footstep();
     } else {
       this.player.stepPhase = 0;
+      this.player.vx = 0;
+      this.player.vy = 0;
     }
 
     // Proposed new positions
@@ -658,6 +820,84 @@ class OfficeGame {
     this.drawHUDNavigation();
 
     this.ctx.restore();
+
+    // 9. Draw Dynamic Floating Virtual Joystick (Screen Space, Among Us Style)
+    this.drawDynamicJoystick();
+  }
+
+  drawDynamicJoystick() {
+    if (!this.joystick.active) return;
+
+    const ctx = this.ctx;
+    const { startX, startY, curX, curY, radius, knobRadius } = this.joystick;
+
+    ctx.save();
+
+    // 1. Outer Translucent Glass Base Ring
+    ctx.beginPath();
+    ctx.arc(startX, startY, radius, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(10, 18, 36, 0.68)';
+    ctx.fill();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.55)';
+    ctx.stroke();
+
+    // Concentric inner tech ring
+    ctx.beginPath();
+    ctx.arc(startX, startY, radius * 0.55, 0, Math.PI * 2);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+    ctx.stroke();
+
+    // 4 Cardinal Directional Markers (N, S, E, W)
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.75)';
+    ctx.lineWidth = 2;
+    const markers = [
+      [0, -radius, 0, -radius + 6],
+      [0, radius, 0, radius - 6],
+      [-radius, 0, -radius + 6, 0],
+      [radius, 0, radius - 6, 0]
+    ];
+    for (const [x1, y1, x2, y2] of markers) {
+      ctx.beginPath();
+      ctx.moveTo(startX + x1, startY + y1);
+      ctx.lineTo(startX + x2, startY + y2);
+      ctx.stroke();
+    }
+
+    // 2. Vector Connecting Stem between Base and Knob
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(curX, curY);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'rgba(0, 255, 65, 0.45)';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // 3. Thumb Knob (Nub)
+    ctx.shadowColor = 'rgba(0, 255, 65, 0.8)';
+    ctx.shadowBlur = 12;
+
+    const knobGrad = ctx.createRadialGradient(curX - 4, curY - 4, 2, curX, curY, knobRadius);
+    knobGrad.addColorStop(0, '#50fa7b');
+    knobGrad.addColorStop(0.6, '#00cc33');
+    knobGrad.addColorStop(1, '#062612');
+
+    ctx.beginPath();
+    ctx.arc(curX, curY, knobRadius, 0, Math.PI * 2);
+    ctx.fillStyle = knobGrad;
+    ctx.fill();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = '#ffffff';
+    ctx.stroke();
+
+    // Center Core Pip
+    ctx.beginPath();
+    ctx.arc(curX, curY, 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+
+    ctx.restore();
   }
 
   drawHallways() {
