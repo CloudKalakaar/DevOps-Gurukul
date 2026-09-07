@@ -40,17 +40,25 @@ class GameUIManager {
 
     banner.className = 'incident-alert-banner show alert';
     banner.innerHTML = `
-      <div class="iab-left">
-        <span class="iab-siren">🚨</span>
-        <span class="iab-sev">${inc.severity}</span>
-        <span class="iab-ticket">#${inc.ticketId}</span>
-      </div>
-      <div class="iab-center">
-        <span class="iab-room">${inc.room}:</span>
-        <span class="iab-title">${inc.title}</span>
-      </div>
-      <div class="iab-right">
-        <button class="iab-map-btn" onclick="gameUI.toggleAdminMap(true)">🗺️ MAP [M]</button>
+      <div class="iab-inner">
+        <div class="iab-meta-row">
+          <div class="iab-left">
+            <span class="iab-siren">🚨</span>
+            <span class="iab-sev">${inc.severity}</span>
+            <span class="iab-ticket">#${inc.ticketId}</span>
+          </div>
+          <div class="iab-right">
+            <button class="iab-map-btn" onclick="gameUI.toggleAdminMap(true)" title="Open Admin Map">
+              <span class="iab-map-ico">🗺️</span>
+              <span class="iab-map-txt">MAP</span>
+              <span class="iab-hotkey">[M]</span>
+            </button>
+          </div>
+        </div>
+        <div class="iab-body-row">
+          <span class="iab-room">${inc.room}:</span>
+          <span class="iab-title">${inc.title}</span>
+        </div>
       </div>
     `;
 
@@ -63,16 +71,20 @@ class GameUIManager {
 
     banner.className = 'incident-alert-banner show resolved';
     banner.innerHTML = `
-      <div class="iab-left">
-        <span class="iab-siren">✅</span>
-        <span class="iab-sev" style="color:#00ff41;background:rgba(0,255,65,0.2);">RESOLVED</span>
-        <span class="iab-ticket">#${inc.ticketId}</span>
-      </div>
-      <div class="iab-center">
-        <span class="iab-title" style="color:#fff;">Incident Cleared! System Health Restored. +200 XP</span>
-      </div>
-      <div class="iab-right">
-        <span style="font-size:10px;color:#94a3b8;font-family:monospace;">NEXT ALERT INCOMING...</span>
+      <div class="iab-inner">
+        <div class="iab-meta-row">
+          <div class="iab-left">
+            <span class="iab-siren">✅</span>
+            <span class="iab-sev" style="color:#00ff41;background:rgba(0,255,65,0.2);">RESOLVED</span>
+            <span class="iab-ticket">#${inc.ticketId}</span>
+          </div>
+          <div class="iab-right">
+            <span class="iab-next-lbl">NEXT ALERT INCOMING...</span>
+          </div>
+        </div>
+        <div class="iab-body-row">
+          <span class="iab-title" style="color:#00ff41;font-weight:700;">Incident Cleared! System Health Restored. +200 XP</span>
+        </div>
       </div>
     `;
 
@@ -149,7 +161,27 @@ class GameUIManager {
   // ── Left Pinned Task List ───────────────────────────────────────
   renderPinnedTasks() {
     if (!this.pinnedList || typeof LABS === 'undefined') return;
-    this.pinnedList.innerHTML = '';
+
+    let headerEl = this.pinnedList.querySelector('.atl-header');
+    let itemsEl  = this.pinnedList.querySelector('.atl-items');
+
+    if (!headerEl || !itemsEl) {
+      this.pinnedList.innerHTML = `
+        <div class="atl-header" id="atl-toggle-btn" title="Toggle Lab Tasks Checklist">
+          <span class="atl-title">📋 LAB TASKS</span>
+          <span class="atl-chevron">▾</span>
+        </div>
+        <div class="atl-items" id="atl-items-list"></div>
+      `;
+      headerEl = this.pinnedList.querySelector('.atl-header');
+      itemsEl  = this.pinnedList.querySelector('.atl-items');
+      headerEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.pinnedList.classList.toggle('expanded');
+      });
+    }
+
+    itemsEl.innerHTML = '';
 
     // Sample active tasks from key IT office stations
     const samples = [
@@ -183,7 +215,7 @@ class GameUIManager {
         const lab = LABS.find(l => l.id === s.id) || LABS[0];
         if (lab) this.openDirectLabModal(lab, s.room);
       });
-      this.pinnedList.appendChild(item);
+      itemsEl.appendChild(item);
     });
   }
 
@@ -406,12 +438,10 @@ class GameUIManager {
   renderAdminMapDetails() {
     const playerMarker = document.getElementById('map-player-pin');
     if (playerMarker && window.officeGame) {
-      const scaleX = 360 / 1650;
-      const scaleY = 240 / 1150;
-      const pinX = window.officeGame.player.x * scaleX;
-      const pinY = window.officeGame.player.y * scaleY;
-      playerMarker.style.left = `${pinX}px`;
-      playerMarker.style.top  = `${pinY}px`;
+      const pinXPct = Math.max(3, Math.min(97, (window.officeGame.player.x / 1650) * 100));
+      const pinYPct = Math.max(3, Math.min(97, (window.officeGame.player.y / 1150) * 100));
+      playerMarker.style.left = `${pinXPct.toFixed(1)}%`;
+      playerMarker.style.top  = `${pinYPct.toFixed(1)}%`;
     }
 
     // Attach click-to-travel listeners to room blocks on the map

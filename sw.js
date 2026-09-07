@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sre-survival-v4';
+const CACHE_NAME = 'sre-survival-v5';
 const ASSETS = [
   './',
   './index.html',

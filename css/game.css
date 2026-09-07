@@ -99,7 +99,7 @@
   left: 14px;
   z-index: 95;
   max-width: 290px;
-  background: rgba(8, 14, 24, 0.7);
+  background: rgba(8, 14, 24, 0.75);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 8px;
   padding: 8px 10px;
@@ -108,6 +108,15 @@
   gap: 6px;
   backdrop-filter: blur(4px);
   pointer-events: auto;
+}
+
+.atl-header {
+  display: none;
+}
+.atl-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .pinned-task-item {
@@ -473,13 +482,13 @@
   color: #7dd3fc;
   text-align: center;
 }
-.s-room.cafe   { left: 10px;  top: 145px; width: 95px; height: 100px; }
-.s-room.dev    { left: 115px; top: 140px; width: 110px; height: 105px; }
-.s-room.server { left: 10px;  top: 20px;  width: 95px; height: 110px; border-color: #38bdf8; }
-.s-room.noc    { left: 115px; top: 20px;  width: 110px; height: 105px; border-color: #facc15; }
-.s-room.cloud  { left: 235px; top: 20px;  width: 115px; height: 105px; border-color: #f472b6; }
-.s-room.iac    { left: 235px; top: 140px; width: 115px; height: 105px; border-color: #c084fc; }
-.s-room.war    { left: 140px; top: 4px;   width: 60px; height: 14px; border-color: #ef4444; color: #ef4444; }
+.s-room.cafe   { left: 2%;  top: 54%; width: 29%; height: 42%; }
+.s-room.dev    { left: 33%; top: 54%; width: 33%; height: 42%; }
+.s-room.server { left: 2%;  top: 8%;  width: 29%; height: 42%; border-color: #38bdf8; }
+.s-room.noc    { left: 33%; top: 8%;  width: 33%; height: 42%; border-color: #facc15; }
+.s-room.cloud  { left: 68%; top: 8%;  width: 30%; height: 42%; border-color: #f472b6; }
+.s-room.iac    { left: 68%; top: 54%; width: 30%; height: 42%; border-color: #c084fc; }
+.s-room.war    { left: 36%; top: 1.5%; width: 28%; height: 6%;  border-color: #ef4444; color: #ef4444; }
 
 /* Player Marker on Map */
 .map-player-pin {
@@ -600,18 +609,14 @@
   position: absolute;
   top: 14px;
   left: 50%;
-  transform: translateX(-50%) translateY(-100px);
+  transform: translateX(-50%) translateY(-140px);
   z-index: 120;
-  max-width: 680px;
+  max-width: 720px;
   width: calc(100% - 32px);
   background: rgba(28, 9, 12, 0.95);
   border: 2px solid #ef4444;
   border-radius: 12px;
   padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
   box-shadow: 0 0 35px rgba(239, 68, 68, 0.6), inset 0 0 15px rgba(239, 68, 68, 0.2);
   backdrop-filter: blur(8px);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -626,6 +631,21 @@
   background: rgba(6, 28, 14, 0.95);
   border-color: #00ff41;
   box-shadow: 0 0 35px rgba(0, 255, 65, 0.6), inset 0 0 15px rgba(0, 255, 65, 0.2);
+}
+
+.iab-inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.iab-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .iab-left {
@@ -646,28 +666,45 @@
   padding: 2px 7px;
   border-radius: 4px;
   letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.iab-sev.resolved {
+  color: #00ff41;
+  background: rgba(0, 255, 65, 0.2);
+  border: 1px solid rgba(0, 255, 65, 0.4);
 }
 .iab-ticket {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   font-weight: 700;
   color: #fca5a5;
+  white-space: nowrap;
 }
 
-.iab-center {
+.iab-body-row {
   flex: 1;
   min-width: 0;
   font-size: 12px;
   line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .iab-room {
   color: #38bdf8;
   font-weight: 800;
   font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
 }
 .iab-title {
   color: #fff;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .iab-right { flex-shrink: 0; }
@@ -683,11 +720,20 @@
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 .iab-map-btn:hover {
   background: #38bdf8;
   color: #060910;
   box-shadow: 0 0 14px rgba(56, 189, 248, 0.8);
+}
+.iab-next-lbl {
+  font-size: 10px;
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
 }
 
 /* Flashing Red Incident Hazard on Admin Map */
@@ -714,5 +760,241 @@
 @keyframes incidentBtnStrobe {
   0%,100% { transform: scale(1.06); box-shadow: 0 0 25px rgba(239,68,68,0.7); }
   50%     { transform: scale(1.14); box-shadow: 0 0 45px rgba(239,68,68,1), 0 0 15px #fee2e2; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE MOBILE / TABLET OPTIMIZATIONS (≤768px)
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── 1. Top Among Us Progress Bar (Sleek, Edge-to-Edge) ── */
+  .among-top-bar {
+    top: 6px;
+    left: 8px;
+    right: 8px;
+    gap: 2px;
+  }
+  .among-task-label {
+    font-size: 8.5px;
+    letter-spacing: 0.8px;
+  }
+  .among-task-track {
+    width: 100%;
+    height: 8px;
+    border-radius: 3px;
+    border-width: 1.5px;
+  }
+
+  /* ── 2. Real-Time Incident Banner (Clean 2-Row Stacked Card) ── */
+  .incident-alert-banner {
+    top: 34px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-width: none;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border-width: 1.5px;
+    transform: translateY(-160px);
+  }
+  .incident-alert-banner.show {
+    transform: translateY(0);
+  }
+  .iab-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+  }
+  .iab-meta-row {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .iab-siren {
+    font-size: 16px;
+  }
+  .iab-sev {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+  .iab-ticket {
+    font-size: 9px;
+  }
+  .iab-body-row {
+    width: 100%;
+    font-size: 11px;
+    line-height: 1.35;
+    display: block;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .iab-room {
+    display: inline;
+    margin-right: 4px;
+    font-size: 11px;
+  }
+  .iab-title {
+    display: inline;
+    white-space: normal;
+    font-size: 11px;
+    color: #f1f5f9;
+  }
+  .iab-hotkey {
+    display: none;
+  }
+  .iab-map-btn {
+    padding: 3px 8px;
+    font-size: 10px;
+    border-radius: 4px;
+  }
+
+  /* ── 3. Pinned Lab Tasks (Collapsible Drawer, Non-Obtrusive) ── */
+  .among-task-list {
+    top: auto;
+    bottom: 84px;
+    left: 10px;
+    max-width: 260px;
+    padding: 5px 8px;
+    background: rgba(8, 14, 24, 0.88);
+    border-radius: 8px;
+    z-index: 90;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+  }
+  .atl-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 800;
+    color: #38bdf8;
+    cursor: pointer;
+    user-select: none;
+    padding: 2px 4px;
+    gap: 8px;
+  }
+  .atl-chevron {
+    transition: transform 0.2s;
+    font-size: 10px;
+    color: #94a3b8;
+  }
+  .among-task-list:not(.expanded) .atl-items {
+    display: none;
+  }
+  .among-task-list.expanded .atl-chevron {
+    transform: rotate(180deg);
+  }
+  .among-task-list.expanded .atl-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 6px;
+    max-height: 140px;
+    overflow-y: auto;
+  }
+  .pinned-task-item {
+    font-size: 10px;
+  }
+
+  /* ── 4. Ergonomic Action Buttons for Mobile Touch ── */
+  .among-actions-hud {
+    bottom: 12px;
+    right: 12px;
+    gap: 8px;
+  }
+  .among-btn {
+    width: 64px;
+    height: 64px;
+    border-width: 3px;
+  }
+  .among-btn-icon {
+    font-size: 20px;
+  }
+  .among-btn-title {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+  .use-hint {
+    display: none;
+  }
+  .virtual-joystick-zone {
+    width: 76px;
+    height: 76px;
+    bottom: 12px;
+    left: 12px;
+    font-size: 8px;
+  }
+
+  /* ── 5. Responsive Modals & Incident Terminal ── */
+  .among-modal-overlay {
+    padding: 8px;
+  }
+  .among-task-console {
+    max-height: 94vh;
+    border-radius: 12px;
+    border-width: 2px;
+  }
+  .atc-topbar {
+    padding: 8px 12px;
+  }
+  .atc-mission-title {
+    font-size: 13px;
+  }
+  .atc-npc-strip {
+    padding: 6px 12px;
+    gap: 8px;
+  }
+  .atc-npc-av {
+    font-size: 22px;
+  }
+  .atc-npc-nm {
+    font-size: 11px;
+  }
+  .atc-npc-dialog {
+    font-size: 11px;
+  }
+  .atc-steps-list {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .stm-step-box {
+    padding: 8px 10px;
+  }
+  .stm-step-title {
+    font-size: 12px;
+  }
+  .stm-step-explain {
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+  .stm-cmd-row {
+    padding: 6px 8px;
+    font-size: 11px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .stm-cmd-text {
+    font-size: 11px;
+    word-break: break-all;
+  }
+  .stm-step-actions {
+    gap: 6px;
+  }
+  .stm-run-btn, .stm-confirm-btn {
+    padding: 6px 10px;
+    font-size: 10px;
+    min-height: 34px;
+  }
+
+  /* ── 6. Admin Blueprint Map on Mobile ── */
+  .admin-map-box {
+    padding: 10px;
+    border-radius: 12px;
+    max-height: 92vh;
+  }
+  .map-schematic-wrap {
+    height: 200px;
+  }
+  .s-room {
+    font-size: 8px;
+  }
 }
 
